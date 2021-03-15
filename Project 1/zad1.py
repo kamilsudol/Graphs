@@ -46,13 +46,13 @@ def file_reader(name): #funkcja zwraca liste zawierajaca macierz wraz z jej type
 
 
 def resolve_type(matrix):
-    if len(matrix) != len(matrix[0]):
-        if check_columns(matrix) and check_redundant(matrix):
-            return 1
-    else:
+    if len(matrix) == len(matrix[0]):
         if check_adjacency(matrix):
             return 2
-        elif check_redundant(matrix):
+        elif check_columns(matrix) and check_redundant(matrix):
+            return 1
+    else:
+        if check_columns(matrix) and check_redundant(matrix):
             return 1
     print("Wrong input!")
     SystemExit(1)
