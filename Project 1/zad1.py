@@ -5,6 +5,34 @@ from igraph import *
 import numpy as np
 
 
+def list_to_adjacency_matrix(matrix):
+    converted_matrix = np.zeros((len(matrix), len(matrix)), dtype=int)
+    tmp_idx = 0
+    for row in matrix:
+        for x in row:
+            converted_matrix[tmp_idx, int(x) - 1] = 1
+        tmp_idx += 1
+    return converted_matrix
+
+
+def adjacency_matrix_to_list(matrix):
+    converted_matrix = []
+    for row in matrix:
+        tmp_val = 1
+        converted_row = []
+        for x in row:
+            if int(x):
+                converted_row.append(tmp_val)
+            tmp_val += 1
+        converted_matrix.append(converted_row)
+
+
+def conversion(input):
+    if input[1] == 0:
+        list_to_adjacency_matrix(input[0])
+        # list_to_incidence_matrix(matrix)
+
+
 def check_adjacency(matrix):
     for i in range(len(matrix)):
         for j in range(int(i/2)):
@@ -29,7 +57,7 @@ def check_redundant(matrix):
     return len(unique_columns) == len(matrix)
 
 
-def file_reader(name): #funkcja zwraca liste zawierajaca macierz wraz z jej typem, gdzie 0 - lista sasiedztwa, 1 - macierz incydencji, 2 - macierz sasiedztwa
+def file_reader(name): #funkcja zwraca liste zawierajaca macierz wraz z jej typem, gdzie 0 - lista sasiedztwa, 1 - macierz incydencji, 2 - macierz sasiedztwa, 3 - oba
     matrix = []
     try:
         file = open(name, 'r')
@@ -48,6 +76,8 @@ def file_reader(name): #funkcja zwraca liste zawierajaca macierz wraz z jej type
 def resolve_type(matrix):
     if len(matrix) == len(matrix[0]):
         if check_adjacency(matrix):
+            if check_columns(matrix) and check_redundant(matrix):
+                return 3
             return 2
         elif check_columns(matrix) and check_redundant(matrix):
             return 1
@@ -167,5 +197,7 @@ if __name__ == '__main__':
     # # g = create_igraph_from_incidence_matrix(m)
     # plot_igraph_on_circle(g)
     # file_reader("m_incydencji.txt")
-    # file_reader("l_sasiedztwa.txt")
-    file_reader("m_sasiedztwa.txt")
+    matrix_obj = file_reader("l_sasiedztwa.txt")
+    converted = list_to_adjacency_matrix(matrix_obj[0])
+    adjacency_matrix_to_list(converted)
+    # file_reader("m_sasiedztwa.txt")
