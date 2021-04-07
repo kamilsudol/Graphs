@@ -5,23 +5,35 @@ from igraph_creation import *
 from MatrixRepresentation import MatrixRepresentation
 from random_graph import *
 
-if __name__ == '__main__':
-    filename = input("Wskaż nazwę pliku zawierającego macierz w formie\n - listy sąsiedztwa\n - macierzy incydencji\n - macierzy sąsiedztwa\n> ")
 
-    matrix, matrix_representation = read_matrix_from_file(filename)
-    print("Wykryto " + matrix_representation.to_string())
+def print_list(list):
+    i = 1
+    for row in list:
+        string = str(i) + ". "
+        for x in row:
+            string += str(x) + " "
+        print(string)
+        i += 1
 
-    graph = matrix_representation.to_igraph_func()(matrix)
-    plot_igraph_on_circle(graph)
 
+def print_matrix(matrix):
+    for row in matrix:
+        string = ""
+        for x in row:
+            string += str(x) + " "
+        print(string)
+
+
+def graph_print(matrix_representation_kind, matrix):
     matrix_representation_out = MatrixRepresentation(int(input("Wskaż format wyjściowy macierzy\n - 0 - lista sąsiedztwa\n - 1 - macierz incydencji\n - 2 - macierz sąsiedztwa\n> ")))
-    converted = matrix_representation.convert_func(matrix_representation_out)(matrix)
-
+    converted = matrix_representation_kind.convert_func(matrix_representation_out)(matrix)
     if matrix_representation_out == MatrixRepresentation.List:
-        print('[[' + ']\n ['.join( [' '.join( [str(cell) for cell in row] ) for row in converted] ) + ']]\n')
+        print_list(converted)
     else:
-        print(np.matrix(converted))
+        print_matrix(converted)
 
+
+if __name__ == '__main__':
     confirm_random = input("Czy chcesz wygenerowac graf losowy?    tak/nie\n")
     if confirm_random == "tak":
         random_graph = []
@@ -34,6 +46,17 @@ if __name__ == '__main__':
             probability = float(input("Podaj prawdopodbienstwo istnienia krawedzi.\n"))
             random_graph_adj = random_graph_probability(num_vertices, probability)
 
-        print(np.matrix(random_graph_adj))
+        graph_print(MatrixRepresentation.AdjacencyMatrix, random_graph_adj)
+
         random_graph = MatrixRepresentation.AdjacencyMatrix.to_igraph_func()(random_graph_adj)
         plot_igraph_on_circle(random_graph)
+
+    filename = input("Wskaż nazwę pliku zawierającego macierz w formie\n - listy sąsiedztwa\n - macierzy incydencji\n - macierzy sąsiedztwa\n> ")
+
+    matrix, matrix_representation = read_matrix_from_file(filename)
+    print("Wykryto " + matrix_representation.to_string())
+
+    graph = matrix_representation.to_igraph_func()(matrix)
+    plot_igraph_on_circle(graph)
+
+    graph_print(matrix_representation, matrix)

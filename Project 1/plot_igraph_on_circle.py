@@ -18,7 +18,7 @@ def span_vertices_on_circle(num_of_vertices):
 
 
 def plot_vertices(vertices, ax):
-    circle_radius = 0.04  # 4% of plot width. Maybe make it function of len(vertices)?
+    circle_radius = 0.04  # 4% of plot width.
     label_from_1 = 1
 
     for i in range(len(vertices)):

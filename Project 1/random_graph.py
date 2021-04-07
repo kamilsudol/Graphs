@@ -1,6 +1,7 @@
 import numpy as np
 import random as rng
 
+
 def adj_matrix_init_zero(num_vertices):
     matrix = []
 
@@ -11,6 +12,7 @@ def adj_matrix_init_zero(num_vertices):
 
     return matrix
 
+
 def random_graph_edges(num_vertices, num_edges):
     matrix = adj_matrix_init_zero(num_vertices)
     rng.seed()
@@ -19,14 +21,9 @@ def random_graph_edges(num_vertices, num_edges):
         row = rng.randint(1, num_vertices-1)
         col = rng.randint(0, row-1)
 
-        # print("------------------")
-        # print(np.matrix(matrix))
-        # print("[{}, {}]".format(row, col))
-
         while matrix[row][col] != 0:
             row = rng.randint(1, num_vertices-1)
             col = rng.randint(0, row-1)
-            # print("[{}, {}] = {}".format(row, col, matrix[row][col]))
 
         matrix[row][col] = 1
         matrix[col][row] = 1
