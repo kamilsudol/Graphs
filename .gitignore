@@ -6,4 +6,5 @@
 /Project 1/.idea
 /.vs
 .vscode/settings.json
-Project 2/__pycache__
+/Project 2/__pycache__
+/Project 2/.idea
