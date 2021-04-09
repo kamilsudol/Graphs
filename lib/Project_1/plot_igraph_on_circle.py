@@ -62,7 +62,7 @@ def plot_igraph_on_circle_colormap(g, colormap):
     fig, ax = plt.subplots()
 
     vertices = span_vertices_on_circle(g.vcount())
-    plot_vertices_multi(vertices, ax, colormap)
+    plot_vertices_colormap(vertices, ax, colormap)
     plot_edges(vertices, g.es)
 
     normalize_plot(ax)
