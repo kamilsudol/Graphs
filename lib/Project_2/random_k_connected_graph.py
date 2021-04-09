@@ -1,18 +1,15 @@
+from lib.Project_1.igraph_creation import create_igraph_from_adjacency_matrix
+from lib.Project_1.plot_igraph_on_circle import plot_igraph_on_circle
+
 import numpy as np
 import numpy.lib.recfunctions as recfunctions
 import random as rng
 
-import sys
-import os
-sys.path.append(os.path.abspath('Project 1'))   #hacky, maybe add proper modules and lib directory?
-
-from igraph_creation import create_igraph_from_adjacency_matrix
-from plot_igraph_on_circle import plot_igraph_on_circle
 
 def generate_index_not(index_to_avoid, adj_matrix, seq):
     index = rng.randint(0, len(seq) - 1)
     for reretries in range(100):
-        if index == index_to_avoid or (adj_matrix[ seq[index]['vertex'] ][ seq[index_to_avoid]['vertex'] ] == 1):
+        if index == index_to_avoid or (adj_matrix[seq[index]['vertex']][seq[index_to_avoid]['vertex']] == 1):
             index = rng.randint(0, len(seq) - 1)
         else:
             return index

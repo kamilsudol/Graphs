@@ -1,14 +1,12 @@
-import graphic_sequence as gseq
+import lib.Project_2.graphic_sequence as gseq
+
 import random as rng
 import numpy as np
 
-import sys
-import os
-sys.path.append(os.path.abspath('Project 1'))   # łeee
+from lib.Project_1.matrix_conversions import adjacency_matrix_to_incidence_matrix
+from lib.Project_1.igraph_creation import create_igraph_from_incidence_matrix
+from lib.Project_1.plot_igraph_on_circle import plot_igraph_on_circle
 
-from matrix_conversions import adjacency_matrix_to_incidence_matrix
-from igraph_creation import create_igraph_from_incidence_matrix
-from plot_igraph_on_circle import plot_igraph_on_circle
 
 def roll_edges(inc, num_vertices):
     rng.seed()
@@ -35,6 +33,7 @@ def swap_between_columns(row, col1, col2, matrix):
     matrix[row][col1] = matrix[row][col2]
     matrix[row][col2] = temp
 
+
 def find_vertices(num_vertices, inc_matrix, edge_index):
     vertices = [-1, -1]
     for row in range(num_vertices):
@@ -44,6 +43,7 @@ def find_vertices(num_vertices, inc_matrix, edge_index):
             else:
                 vertices[1] = row
     return vertices
+
 
 def randomize_edges(graphic_seq, num_shuffles):
     adj = gseq.is_graphic_sequence(graphic_seq)
@@ -70,6 +70,7 @@ def randomize_edges(graphic_seq, num_shuffles):
         return inc
     else:
         print("Ciag nie jest graficzny")
+
 
 def test_randomization():
     num_shuffles = int(input("Podaj liczbe randomizacji.\n"))

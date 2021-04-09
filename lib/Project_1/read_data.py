@@ -1,6 +1,5 @@
 import re
-import numpy as np
-from MatrixRepresentation import *
+from .MatrixRepresentation import *
 
 
 def check_adjacency(matrix):

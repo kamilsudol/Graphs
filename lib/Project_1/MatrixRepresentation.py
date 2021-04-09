@@ -1,6 +1,6 @@
 from enum import Enum
-from igraph_creation import *
-from matrix_conversions import *
+from .igraph_creation import *
+from .matrix_conversions import *
 
 
 class MatrixRepresentation(Enum):

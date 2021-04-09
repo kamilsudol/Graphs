@@ -1,9 +1,8 @@
-import sys
-import os
+from .graphic_sequence import load_sequence, is_graphic_sequence
+
+from lib.Project_1.matrix_conversions import adjacency_matrix_to_list
+
 import numpy as np
-sys.path.append(os.path.abspath('Project 1'))
-from graphic_sequence import load_sequence, is_graphic_sequence
-from matrix_conversions import adjacency_matrix_to_list
 
 # just for tests
 # from random_graph import random_graph_edges

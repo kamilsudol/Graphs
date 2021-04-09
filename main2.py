@@ -1,7 +1,7 @@
-from graphic_sequence import test_graphic_sequence
-from edge_randomizer import test_randomization
-from random_k_connected_graph import generate_and_show_random_k_connected_graph
-from largest_connected_component import find_largest_connected_component
+from lib.Project_2.graphic_sequence import test_graphic_sequence
+from lib.Project_2.edge_randomizer import test_randomization
+from lib.Project_2.random_k_connected_graph import generate_and_show_random_k_connected_graph
+from lib.Project_2.largest_connected_component import find_largest_connected_component
 
 
 do_nothing = lambda : None

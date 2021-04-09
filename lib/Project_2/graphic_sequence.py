@@ -1,15 +1,14 @@
+from lib.Project_1.igraph_creation import create_igraph_from_adjacency_matrix
+from lib.Project_1.plot_igraph_on_circle import plot_igraph_on_circle
+
 import numpy as np
 import numpy.lib.recfunctions as recfunctions
-import sys
-import os
-sys.path.append(os.path.abspath('Project 1'))   #hacky, maybe add proper modules and lib directory?
 
-from igraph_creation import create_igraph_from_adjacency_matrix
-from plot_igraph_on_circle import plot_igraph_on_circle
 
 def load_sequence():
     sequence_input = input('Wprowadz ciag: ').strip().split(' ')
     return [int(i) for i in sequence_input]
+
 
 def is_graphic_sequence(seq):
     seq = np.sort(seq)[::-1]
@@ -31,6 +30,7 @@ def is_graphic_sequence(seq):
         seq[0]['neighbors'] = 0
         seq.sort(order='neighbors')
         seq = seq[::-1]
+
 
 def test_graphic_sequence():
     seq = load_sequence()

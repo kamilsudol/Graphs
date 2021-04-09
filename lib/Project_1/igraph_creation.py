@@ -1,5 +1,5 @@
 from igraph import *
-from matrix_conversions import list_to_adjacency_matrix
+from .matrix_conversions import list_to_adjacency_matrix
 
 
 # assume simple graph (matrix symmetric with respect to the diagonal and only zeros on diagonal)

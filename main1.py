@@ -1,9 +1,7 @@
-from read_data import read_matrix_from_file
-from plot_igraph_on_circle import plot_igraph_on_circle
-from matrix_conversions import *
-from igraph_creation import *
-from MatrixRepresentation import MatrixRepresentation
-from random_graph import *
+from lib.Project_1.read_data import read_matrix_from_file
+from lib.Project_1.plot_igraph_on_circle import plot_igraph_on_circle
+from lib.Project_1.MatrixRepresentation import MatrixRepresentation
+from lib.Project_1.random_graph import *
 
 
 def print_list(list):

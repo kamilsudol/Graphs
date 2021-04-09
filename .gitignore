@@ -1,6 +1,8 @@
 ﻿################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
+__pycache__
+.idea
 
 /Project 1/__pycache__
 /Project 1/.idea
