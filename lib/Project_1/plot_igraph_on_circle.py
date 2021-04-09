@@ -54,3 +54,28 @@ def plot_igraph_on_circle(g):
     normalize_plot(ax)
     plt.axis('off')
     plt.show()
+
+
+#rozszerzenie poprzednich funkcji o obsluge map kolorow
+
+def plot_igraph_on_circle_colormap(g, colormap):
+    fig, ax = plt.subplots()
+
+    vertices = span_vertices_on_circle(g.vcount())
+    plot_vertices_multi(vertices, ax, colormap)
+    plot_edges(vertices, g.es)
+
+    normalize_plot(ax)
+    plt.axis('off')
+    plt.show()
+
+
+def plot_vertices_colormap(vertices, ax, colormap):
+    circle_radius = 0.04  # 4% of plot width.
+    label_from_1 = 1
+
+    for i in range(len(vertices)):
+        vertex = plt.Circle((vertices[i][0], vertices[i][1]), circle_radius, color=colormap[i + label_from_1], zorder=10)
+        ax.add_patch(vertex)
+        plt.text(vertices[i][0], vertices[i][1], str(i + label_from_1), ha='center', va='center', fontsize='medium',
+                 zorder=11)
