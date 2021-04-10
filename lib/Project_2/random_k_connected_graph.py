@@ -21,15 +21,17 @@ def generate_random_k_connected_graph(vertices, k):
     if vertices*k % 2 == 1:
         return None
 
-    seq = recfunctions.merge_arrays([[k]*vertices, range(vertices)])
-    seq.dtype.names = ['neighbors', 'vertex']
-    adj_matrix = np.zeros((len(seq), len(seq)))
-
     for retries in range(100):
+        seq = recfunctions.merge_arrays([[k]*vertices, range(vertices)])
+        seq.dtype.names = ['neighbors', 'vertex']
+        adj_matrix = np.zeros((len(seq), len(seq)))
+
         while True:
             if len(seq) == 0:
                 print("Ilość prób: " + str(retries + 1))
                 return adj_matrix
+            elif len(seq) == 1:
+                break
 
             index_from = rng.randint(0, len(seq) - 1)
             index_to = generate_index_not(index_from, adj_matrix, seq)
@@ -51,6 +53,8 @@ def generate_random_k_connected_graph(vertices, k):
             else:
                 seq[index_to]['neighbors'] -= 1
 
+    
+    print("Ilość prób: " + str(retries + 1))
     return None
 
 def generate_and_show_random_k_connected_graph():
