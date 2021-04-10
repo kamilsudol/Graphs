@@ -35,7 +35,7 @@ def random_graph_probability(num_vertices, probability):
     rng.seed()
 
     for i in range(num_vertices):
-        for j in range(i-1):
+        for j in range(i):
             if rng.random() <= probability:
                 matrix[i][j] = 1
                 matrix[j][i] = 1
