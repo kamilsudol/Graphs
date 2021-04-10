@@ -62,7 +62,7 @@ def load_matrix(filename):
     return matrix
 
 
-def read_matrix_from_file(name): #funkcja zwraca liste zawierajaca macierz wraz z jej typem
+def read_matrix_from_file(name):  # funkcja zwraca liste zawierajaca macierz wraz z jej typem
     try:
         return [load_list(name), MatrixRepresentation.List]
     except IndexError:
