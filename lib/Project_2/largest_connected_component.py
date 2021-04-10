@@ -1,7 +1,7 @@
 from .graphic_sequence import load_sequence, is_graphic_sequence
 from lib.Project_1.matrix_conversions import adjacency_matrix_to_list
 from lib.Project_1.igraph_creation import create_igraph_from_adjacency_matrix
-from lib.Project_1.plot_igraph_on_circle import plot_igraph_on_circle_colormap
+from lib.Project_1.plot_igraph_on_circle import plot_igraph_on_circle
 
 import numpy as np
 import random as rnd
@@ -68,7 +68,7 @@ def find_largest_connected_component(): #4 2 2 3 2 1 4 2 2 2 2
         connected_components_list = components(graph)
         largest(connected_components_list)
         colormap = create_colormap(connected_components_list)
-        plot_igraph_on_circle_colormap(g, colormap)
+        plot_igraph_on_circle(g, colormap)
     else:
         print("Ciag nie jest graficzny")
 
