@@ -47,13 +47,14 @@ def find_vertices(num_vertices, inc_matrix, edge_index):
 
 def randomize_edges(graphic_seq, num_shuffles):
     adj = gseq.is_graphic_sequence(graphic_seq)
+    is_graphic = False
 
     if adj is not False:
-        print("Ciag jest graficzny")
+        is_graphic = True
         num_vertices = len(graphic_seq)
         
-        graph = gseq.create_igraph_from_adjacency_matrix(adj)
-        gseq.plot_igraph_on_circle(graph)
+        # graph = gseq.create_igraph_from_adjacency_matrix(adj)
+        # gseq.plot_igraph_on_circle(graph)
 
         inc = adjacency_matrix_to_incidence_matrix(adj)
         
@@ -67,9 +68,9 @@ def randomize_edges(graphic_seq, num_shuffles):
                 swap_between_columns(edge_one_vertices[0], edge_one_col, edge_two_col, inc)
                 swap_between_columns(edge_two_vertices[0], edge_one_col, edge_two_col, inc)
 
-        return inc
+        return [is_graphic, inc]
     else:
-        print("Ciag nie jest graficzny")
+        return [is_graphic, []]
 
 
 def test_randomization():
@@ -80,7 +81,7 @@ def test_randomization():
     start_incidence = adjacency_matrix_to_incidence_matrix(adj)
     print(np.matrix(start_incidence))
 
-    randomized_incidence = randomize_edges(graph_seq, num_shuffles)
+    [is_graphic, randomized_incidence] = randomize_edges(graph_seq, num_shuffles)
     print(np.matrix(randomized_incidence))
     graph = create_igraph_from_incidence_matrix(randomized_incidence)
     plot_igraph_on_circle(graph)

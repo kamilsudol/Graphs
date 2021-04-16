@@ -13,6 +13,8 @@ def adj_matrix_init_zero(num_vertices):
 
 
 def random_graph_edges(num_vertices, num_edges):
+    if num_edges > num_vertices*(num_vertices-1)/2:
+        num_edges = int(num_vertices*(num_vertices-1)/2)
     matrix = adj_matrix_init_zero(num_vertices)
     rng.seed()
 
