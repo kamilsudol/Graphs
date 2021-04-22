@@ -176,11 +176,11 @@ def test_eulerian_cycle():
     inc = []
     while len(inc) < 2:
         inc = get_random_eulerian_graph()
+        if len(inc) != 0:
+            print("Ciag graficzny grafu eulerowskiego: ", calculate_graphic_seq_from_incidence(inc, len(inc)))
 
-        print("Ciag graficzny grafu eulerowskiego: ", calculate_graphic_seq_from_incidence(inc, len(inc)))
+            adj_list = matconv.incidence_matrix_to_list(inc)
+            print("Cykl Eulera: ", find_eulerian_cycle(adj_list))
 
-        adj_list = matconv.incidence_matrix_to_list(inc)
-        print("Cykl Eulera: ", find_eulerian_cycle(adj_list))
-
-        graph = icreate.create_igraph_from_incidence_matrix(inc)
-        plot.plot_igraph_on_circle(graph)
+            graph = icreate.create_igraph_from_incidence_matrix(inc)
+            plot.plot_igraph_on_circle(graph)
