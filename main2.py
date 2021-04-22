@@ -18,7 +18,7 @@ if __name__ == '__main__':
         try:
             exercise_index = int(input(
                 "Wybierz funkcje:\n - 1 - rysuj ciag graficzny\n - 2 - przeprowadz randomizacje grafu \n - 3 - znajdz "
-                "najwieksze spojne skladowe na grafie\n - 4 - generuj losowy graf eulerowski i znajdz na nim cykl eulera\n - 5 - generuj losowy graf k-spojny\n - 6 - sprawdz czy "
+                "najwieksza spojna skladowa na grafie\n - 4 - generuj losowy graf eulerowski i znajdz na nim cykl eulera\n - 5 - generuj losowy graf k-spojny\n - 6 - sprawdz czy "
                 "graf jest hamiltonowski\n - 7 - zakoncz\n> ").strip()) - 1
             exercises[exercise_index]()
             if exercise_index == 6:

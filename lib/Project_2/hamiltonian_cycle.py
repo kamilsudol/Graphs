@@ -1,9 +1,10 @@
 import sys
 
 from lib.Project_1.MatrixRepresentation import MatrixRepresentation
-from lib.Project_1.matrix_conversions import incidence_matrix_to_adjacency_matrix, list_to_adjacency_matrix
+from lib.Project_1.matrix_conversions import incidence_matrix_to_adjacency_matrix, list_to_adjacency_matrix, adjacency_matrix_to_list
 from lib.Project_1.random_graph import random_graph_edges, random_graph_probability
 from lib.Project_1.read_data import read_matrix_from_file
+from .largest_connected_component import components
 
 
 def any_representation_to_adjacency_matrix(matrix, matrix_representation):
@@ -62,8 +63,11 @@ def hamil_check_neighbours(path, adjacency_matrix, pos, n_nodes):
 
 
 def find_hamiltonian_cycle():
-    # TODO check for connectivity before searching for the cycle
     adjacency_matrix = retrieve_adjacency_matrix_from_user()
+    list_matrix = adjacency_matrix_to_list(adjacency_matrix)
+    if len(components(list_matrix)) != 1:
+        print('Graf nie jest hamiltonowski.')
+        return
     n_nodes = len(adjacency_matrix)
     path = hamil_check_neighbours([0 for _ in range(n_nodes)], adjacency_matrix, 0, n_nodes)
     if not path:
