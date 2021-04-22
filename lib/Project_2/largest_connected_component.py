@@ -1,13 +1,10 @@
-from .graphic_sequence import load_sequence, is_graphic_sequence
 from lib.Project_1.matrix_conversions import adjacency_matrix_to_list
 from lib.Project_1.igraph_creation import create_igraph_from_adjacency_matrix
 from lib.Project_1.plot_igraph_on_circle import plot_igraph_on_circle
+from .retrieve_adj_matrix_from_user import retrieve_adjacency_matrix_from_user
 
 import numpy as np
 import random as rnd
-
-# just for tests
-# from lib.Project_1.random_graph import random_graph_edges
 
 
 def components(graph):
@@ -59,27 +56,10 @@ def create_colormap(list):
 
 
 def find_largest_connected_component(): #4 2 2 3 2 1 4 2 2 2 2
-    seq = load_sequence()
-    result = is_graphic_sequence(seq)
-    if result is not False:
-        print("Ciag jest graficzny")
-        graph = adjacency_matrix_to_list(result)
-        g = create_igraph_from_adjacency_matrix(result)
-        connected_components_list = components(graph)
-        largest(connected_components_list)
-        colormap = create_colormap(connected_components_list)
-        plot_igraph_on_circle(g, colormap)
-    else:
-        print("Ciag nie jest graficzny")
-
-    ''' test
-    graph = random_graph_edges(25, 30)
-    g = create_igraph_from_adjacency_matrix(graph)
-    test = adjacency_matrix_to_list(graph)
-    connected_components_list = components(test)
+    result = retrieve_adjacency_matrix_from_user()
+    graph = adjacency_matrix_to_list(result)
+    g = create_igraph_from_adjacency_matrix(result)
+    connected_components_list = components(graph)
     largest(connected_components_list)
     colormap = create_colormap(connected_components_list)
-    plot_igraph_on_circle_colormap(g, colormap)
-    # print(colormap[1])
-    # print(connected_components_list)
-    '''
+    plot_igraph_on_circle(g, colormap)

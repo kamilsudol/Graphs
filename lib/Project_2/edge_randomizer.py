@@ -6,12 +6,14 @@ import numpy as np
 from lib.Project_1.matrix_conversions import adjacency_matrix_to_incidence_matrix
 from lib.Project_1.igraph_creation import create_igraph_from_incidence_matrix
 from lib.Project_1.plot_igraph_on_circle import plot_igraph_on_circle
+from lib.Project_1.read_data import print_matrix
+from .retrieve_adj_matrix_from_user import retrieve_adjacency_matrix_from_user
 
 # Pick two random edges from incidence matrix
 # inc -> graph as incidence matrix
 # num_vertices -> number of vertices in a graph (number of rows)
 # Returns array of data in order edge one column, edge two column, edge one vertices, edge two vertices
-def roll_edges(inc, num_vertices):
+def roll_edges(inc, num_vertices, num_edges):
     rng.seed()
 
     edge_one_col = -1
@@ -21,8 +23,8 @@ def roll_edges(inc, num_vertices):
 
     # Pick two different edges
     while edge_one_col == edge_two_col or edge_one_vertices[0] == edge_two_vertices[1] or edge_one_vertices[1] == edge_two_vertices[0]:
-        edge_one_col = rng.randint(0, num_vertices)
-        edge_two_col = rng.randint(0, num_vertices)
+        edge_one_col = rng.randint(0, num_edges)
+        edge_two_col = rng.randint(0, num_edges)
 
         edge_one_vertices = find_vertices(num_vertices, inc, edge_one_col)
         edge_two_vertices = find_vertices(num_vertices, inc, edge_two_col)
@@ -65,45 +67,69 @@ def find_vertices(num_vertices, inc_matrix, edge_index):
 # Returns an array as [is_graphic, inc]
 # where is_graphic is either True/False
 # and inc is the modified incidence matrix 
-def randomize_edges(graphic_seq, num_shuffles):
-    is_graphic = False
-    # Check if graphic sequence is in fact graphic,
-    # and if so return the adjacency matrix of that graphic sequence
-    adj = gseq.is_graphic_sequence(graphic_seq)
+# def randomize_edges(graphic_seq, num_shuffles):
+#     is_graphic = False
+#     # Check if graphic sequence is in fact graphic,
+#     # and if so return the adjacency matrix of that graphic sequence
+#     adj = gseq.is_graphic_sequence(graphic_seq)
+#
+#     if adj is not False:
+#         is_graphic = True
+#         num_vertices = len(graphic_seq)
+#
+#         inc = adjacency_matrix_to_incidence_matrix(adj)
+#
+#         for _ in range(num_shuffles):
+#             edge_one_col, edge_two_col, edge_one_vertices, edge_two_vertices = roll_edges(inc, num_vertices)
+#
+#             # If vertex one in edges one and two is the same vertex
+#             if edge_one_vertices[0] == edge_two_vertices[0]:
+#                 # Swap second vertex
+#                 swap_between_columns(edge_one_vertices[1], edge_one_col, edge_two_col, inc)
+#                 swap_between_columns(edge_two_vertices[1], edge_one_col, edge_two_col, inc)
+#             else:
+#                 # Swap first vertex
+#                 swap_between_columns(edge_one_vertices[0], edge_one_col, edge_two_col, inc)
+#                 swap_between_columns(edge_two_vertices[0], edge_one_col, edge_two_col, inc)
+#
+#         return [is_graphic, inc]
+#     else:
+#         return [is_graphic, []]
 
-    if adj is not False:
-        is_graphic = True
-        num_vertices = len(graphic_seq)
 
-        inc = adjacency_matrix_to_incidence_matrix(adj)
-        
-        for _ in range(num_shuffles):
-            edge_one_col, edge_two_col, edge_one_vertices, edge_two_vertices = roll_edges(inc, num_vertices)
+def randomize_edges(adj, num_shuffles):
 
-            # If vertex one in edges one and two is the same vertex
-            if edge_one_vertices[0] == edge_two_vertices[0]:
-                # Swap second vertex
-                swap_between_columns(edge_one_vertices[1], edge_one_col, edge_two_col, inc)
-                swap_between_columns(edge_two_vertices[1], edge_one_col, edge_two_col, inc)
-            else:
-                # Swap first vertex
-                swap_between_columns(edge_one_vertices[0], edge_one_col, edge_two_col, inc)
-                swap_between_columns(edge_two_vertices[0], edge_one_col, edge_two_col, inc)
+    inc = adjacency_matrix_to_incidence_matrix(adj)
+    num_vertices = len(inc)
+    num_edges = len(inc[0]) - 1
 
-        return [is_graphic, inc]
-    else:
-        return [is_graphic, []]
+    for _ in range(num_shuffles):
+        edge_one_col, edge_two_col, edge_one_vertices, edge_two_vertices = roll_edges(inc, num_vertices, num_edges)
+
+        # If vertex one in edges one and two is the same vertex
+        if edge_one_vertices[0] == edge_two_vertices[0]:
+            # Swap second vertex
+            swap_between_columns(edge_one_vertices[1], edge_one_col, edge_two_col, inc)
+            swap_between_columns(edge_two_vertices[1], edge_one_col, edge_two_col, inc)
+        else:
+            # Swap first vertex
+            swap_between_columns(edge_one_vertices[0], edge_one_col, edge_two_col, inc)
+            swap_between_columns(edge_two_vertices[0], edge_one_col, edge_two_col, inc)
+    return inc
 
 
 def test_randomization():
+    adj = retrieve_adjacency_matrix_from_user()
     num_shuffles = int(input("Podaj liczbe randomizacji.\n"))
-    graph_seq = gseq.load_sequence()
-    adj = gseq.is_graphic_sequence(graph_seq)
 
     start_incidence = adjacency_matrix_to_incidence_matrix(adj)
-    print(np.matrix(start_incidence))
+    print("Przed randomizacja:")
+    print_matrix(start_incidence)
+    graph = create_igraph_from_incidence_matrix(start_incidence)
+    plot_igraph_on_circle(graph)
 
-    [is_graphic, randomized_incidence] = randomize_edges(graph_seq, num_shuffles)
-    print(np.matrix(randomized_incidence))
+    randomized_incidence = randomize_edges(adj, num_shuffles)
+    print("Po randomizacji:")
+    print_matrix(randomized_incidence)
     graph = create_igraph_from_incidence_matrix(randomized_incidence)
     plot_igraph_on_circle(graph)
