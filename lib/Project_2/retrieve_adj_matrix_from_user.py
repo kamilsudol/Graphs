@@ -5,6 +5,7 @@ from lib.Project_1.random_graph import random_graph_edges, random_graph_probabil
 from lib.Project_1.read_data import read_matrix_from_file
 
 
+# reading graph from file as an adjacency matrix
 def graph_file_read():
     filename = input(
         "Wskaż nazwę pliku zawierającego macierz w formie\n - listy sąsiedztwa\n - macierzy incydencji\n - macierzy sąsiedztwa\n> ")
@@ -15,6 +16,7 @@ def graph_file_read():
     return any_representation_to_adjacency_matrix(matrix, matrix_representation)
 
 
+# converting any graph representation to adjacency matrix
 def any_representation_to_adjacency_matrix(matrix, matrix_representation):
     if matrix_representation == MatrixRepresentation.List:
         return list_to_adjacency_matrix(matrix)
@@ -28,9 +30,9 @@ def any_representation_to_adjacency_matrix(matrix, matrix_representation):
 def retrieve_adjacency_matrix_from_user():
     try:
         input_type = int(input('Wpisz 1 aby podac plik zawierajacy dowolna reprezentacje grafu.\n'
-                           'Wpisz 2 aby wylosowac graf G(n, l).\n'
-                           'Wpisz 3 aby wylosowac graf G(n, p).\n'
-                           'Wpisz 4 aby wczytac graf z ciagu graficznego\n').strip())
+                               'Wpisz 2 aby wylosowac graf G(n, l).\n'
+                               'Wpisz 3 aby wylosowac graf G(n, p).\n'
+                               'Wpisz 4 aby wczytac graf z ciagu graficznego\n').strip())
     except ValueError:
         print('Blad: podano niepoprawna wartosc.')
         raise ValueError

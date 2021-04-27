@@ -7,6 +7,7 @@ import numpy as np
 import random as rnd
 
 
+# DFS algorithm
 def components(graph):
     nr = 0
     comp = [-1 for x in graph]
@@ -19,17 +20,18 @@ def components(graph):
     tmp = np.unique(comp)
     result = [[] for x in tmp]
     for i in range(len(comp)):
-        result[comp[i] - 1].append(i+1)
+        result[comp[i] - 1].append(i + 1)
     return result
 
 
 def components_recursive(nr, v, graph, comp):
     for u in graph[v]:
-        if comp[u-1] == -1:
-            comp[u-1] = nr
-            components_recursive(nr, u-1, graph, comp)
+        if comp[u - 1] == -1:
+            comp[u - 1] = nr
+            components_recursive(nr, u - 1, graph, comp)
 
 
+# resolving largest connected components and printing them out
 def largest(list):
     max_len = 0
     max_it = 0
@@ -46,6 +48,7 @@ def largest(list):
     print("Najwieksza skladowa ma numer {}.".format(max_it))
 
 
+# creating a dictionary of colors to sign specific connected components on plot
 def create_colormap(list):
     colormap = {}
     for row in list:
@@ -55,7 +58,7 @@ def create_colormap(list):
     return colormap
 
 
-def find_largest_connected_component(): #4 2 2 3 2 1 4 2 2 2 2
+def find_largest_connected_component():  # 3 3 2 2 2 2 2 2 2
     result = retrieve_adjacency_matrix_from_user()
     graph = adjacency_matrix_to_list(result)
     g = create_igraph_from_adjacency_matrix(result)
