@@ -1,4 +1,5 @@
 import re
+import numpy as np
 from .MatrixRepresentation import *
 
 
@@ -42,12 +43,11 @@ def check_adjacency(matrix):
 
 
 def check_columns(matrix):
-    flag = 2 * len(matrix[0])
-    check_flag = 0
-    for row in matrix:
-        for x in row:
-            check_flag += int(x)
-    return flag == check_flag
+    tmp_matrix = np.array(matrix, dtype=int).transpose()
+    for row in tmp_matrix:
+        if sum(row) != 2:
+            return False
+    return True
 
 
 def check_redundant(matrix):
