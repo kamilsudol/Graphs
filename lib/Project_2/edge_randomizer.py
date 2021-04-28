@@ -3,8 +3,10 @@ import random as rng
 from lib.Project_1.matrix_conversions import adjacency_matrix_to_incidence_matrix
 from lib.Project_1.igraph_creation import create_igraph_from_incidence_matrix
 from lib.Project_1.plot_igraph_on_circle import plot_igraph_on_circle
-from lib.Project_1.read_data import print_matrix
+from lib.Project_1.read_data import print_matrix, print_list, read_matrix_from_file, graph_print
 from .retrieve_adj_matrix_from_user import retrieve_adjacency_matrix_from_user
+
+from lib.Project_1.MatrixRepresentation import MatrixRepresentation
 
 # Pick two random edges from incidence matrix
 # inc -> graph as incidence matrix
@@ -84,19 +86,32 @@ def randomize_edges(adj, num_shuffles):
             swap_between_columns(edge_two_vertices[0], edge_one_col, edge_two_col, inc)
     return inc
 
+def test_randomization(filename=None, output_format=None, num_shuffles=None, plots=None):
+    if filename == None:
+        adj = retrieve_adjacency_matrix_from_user()
+    else:
+        adj, _ = read_matrix_from_file(filename)
+    
+    if num_shuffles == None:
+        num_shuffles = int(input("Podaj liczbe randomizacji.\n"))
+    else:
+        num_shuffles = int(num_shuffles)
 
-def test_randomization():
-    adj = retrieve_adjacency_matrix_from_user()
-    num_shuffles = int(input("Podaj liczbe randomizacji.\n"))
+    if plots == None or plots == 'y':
+        plots = True
+    elif plots == 'n':
+        plots = False
+
+    representation = MatrixRepresentation.IncidenceMatrix
 
     start_incidence = adjacency_matrix_to_incidence_matrix(adj)
     print("Przed randomizacja:")
-    print_matrix(start_incidence)
+    graph_print(representation, start_incidence, output_format)
     graph = create_igraph_from_incidence_matrix(start_incidence)
-    plot_igraph_on_circle(graph)
+    if plots: plot_igraph_on_circle(graph)
 
     randomized_incidence = randomize_edges(adj, num_shuffles)
     print("Po randomizacji:")
-    print_matrix(randomized_incidence)
+    graph_print(representation, randomized_incidence, output_format)
     graph = create_igraph_from_incidence_matrix(randomized_incidence)
-    plot_igraph_on_circle(graph)
+    if plots: plot_igraph_on_circle(graph)

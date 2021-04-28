@@ -1,3 +1,5 @@
+from lib.Project_1.MatrixRepresentation import MatrixRepresentation
+from lib.Project_1.read_data import read_matrix_from_file
 import lib.Project_1.matrix_conversions as matconv
 import lib.Project_1.random_graph as rngraph
 import lib.Project_1.igraph_creation as icreate
@@ -259,17 +261,32 @@ def find_eulerian_cycle(adj_list):
             current_tour.append(temp_list[current_vertex-1][0])
             remove_edge(temp_list, current_vertex, 0)
 
+
+
     return eulerian_cycle
 
-def test_eulerian_cycle():
+def test_eulerian_cycle(filename=None):
     inc = []
     while len(inc) < 2:
-        inc = get_random_eulerian_graph(6, 15, 4, 24)
-        if len(inc) != 0:
-            print("Ciag graficzny grafu eulerowskiego: ", calculate_graphic_seq_from_incidence(inc, len(inc)))
+        if filename == None:
+            inc = get_random_eulerian_graph(6, 15, 4, 24)
+        else:
+            [input_graph, input_representation] = read_matrix_from_file(filename)
+            inc = input_representation.convert_func(MatrixRepresentation.IncidenceMatrix)(input_graph)
 
+        if len(inc) == 0: continue
+
+        graphic_seq = calculate_graphic_seq_from_incidence(inc, len(inc))
+        print("Ciag graficzny grafu: ", graphic_seq)
+        if is_eulerian(graphic_seq):
             adj_list = matconv.incidence_matrix_to_list(inc)
-            print("Cykl Eulera: ", find_eulerian_cycle(adj_list))
+            eulerian_cycle = find_eulerian_cycle(adj_list)
+            if eulerian_cycle[0] != eulerian_cycle[-1]:
+                print("Nie znaleziono cyklu Eulera: ", eulerian_cycle)
+            else:
+                print("Cykl Eulera: ", eulerian_cycle)
 
             graph = icreate.create_igraph_from_incidence_matrix(inc)
             plot.plot_igraph_on_circle(graph)
+        else:
+            print("Graf nie jest Eulerowski")
