@@ -13,10 +13,10 @@ do_nothing = lambda: None
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
-    ap.add_argument("-t", "--task", required=False, help="task number")
+    ap.add_argument("-t", "--task", required=False, help="task number", type=int)
     ap.add_argument("-f", "--filename", required=False, help="input file name")
     ap.add_argument("-o", "--output", required=False, help="graph output format: list/inc/adj")
-    ap.add_argument("-s", "--shuffles", required=False, help="number of edge randomizations")
+    ap.add_argument("-s", "--shuffles", required=False, help="number of edge randomizations", type=int)
     ap.add_argument("-p", "--plots", required=False, help="will it plot? y/n")
     args = vars(ap.parse_args())
 
@@ -24,8 +24,8 @@ if __name__ == '__main__':
 
     try:
         if args['task'] is not None:
-            task = int(args['task'])
 
+            task = args['task']
             tasks = [1, 2, 3, 4, 5, 6]
             tasks.index(task)
 
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     if run_from_cl:
         if task == 2:
             exercises[task - 1](args['filename'], args['output'], args['shuffles'], args['plots'])
-        if task == 4:
+        elif task == 4:
             exercises[task - 1](args['filename'])
         else:
             print('Can\'t run this from command line')

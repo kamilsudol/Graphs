@@ -94,8 +94,6 @@ def test_randomization(filename=None, output_format=None, num_shuffles=None, plo
     
     if num_shuffles == None:
         num_shuffles = int(input("Podaj liczbe randomizacji.\n"))
-    else:
-        num_shuffles = int(num_shuffles)
 
     if plots == None or plots == 'y':
         plots = True
