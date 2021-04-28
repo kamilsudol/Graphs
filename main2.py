@@ -1,10 +1,11 @@
+from Arguments import ArgumentsSingleton
 from lib.Project_2.graphic_sequence import test_graphic_sequence
 from lib.Project_2.edge_randomizer import test_randomization
 from lib.Project_2.random_k_connected_graph import generate_and_show_random_k_connected_graph
 from lib.Project_2.largest_connected_component import find_largest_connected_component
 from lib.Project_2.hamiltonian_cycle import find_hamiltonian_cycle
 from lib.Project_2.eulerian_cycle import test_eulerian_cycle
-import argparse
+
 
 def close():
     return
@@ -12,13 +13,8 @@ def close():
 do_nothing = lambda: None
 
 if __name__ == '__main__':
-    ap = argparse.ArgumentParser()
-    ap.add_argument("-t", "--task", required=False, help="task number", type=int)
-    ap.add_argument("-f", "--filename", required=False, help="input file name")
-    ap.add_argument("-o", "--output", required=False, help="graph output format: list/inc/adj")
-    ap.add_argument("-s", "--shuffles", required=False, help="number of edge randomizations", type=int)
-    ap.add_argument("-p", "--plots", required=False, help="will it plot? y/n")
-    args = vars(ap.parse_args())
+    arg_singleton = ArgumentsSingleton()
+    args = arg_singleton.get_instance().arguments
 
     run_from_cl = False
 
