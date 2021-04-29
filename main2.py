@@ -49,6 +49,6 @@ if __name__ == '__main__':
         if task == 2:
             exercises[task - 1](args['filename'], args['output'], args['shuffles'], args['plots'])
         elif task == 4:
-            exercises[task - 1](args['filename'])
+            exercises[task - 1](args['filename'], args['minv'], args['maxv'], args['shuffles'], args['plots'])
         else:
             print('Can\'t run this from command line')

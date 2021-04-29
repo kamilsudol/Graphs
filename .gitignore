@@ -10,3 +10,7 @@ __pycache__
 .vscode/settings.json
 /Project 2/__pycache__
 /Project 2/.idea
+
+*.png
+*.jpg
+*.jpeg

@@ -1,3 +1,4 @@
+from lib.Project_2.eulerian_cycle import is_duplicate_edge
 import random as rng
 
 from lib.Project_1.matrix_conversions import adjacency_matrix_to_incidence_matrix
@@ -60,37 +61,57 @@ def find_vertices(num_vertices, inc_matrix, edge_index):
                 vertices[1] = row
     return vertices
 
-# Find adjacency matrix from a graphic sequence and randomize it
-# by swapping vertices between edges
+# Perform up to a given number of edge swaps
+# on a graph by swapping vertices between edges
 # adj-> graph as adjacency matrix
 # num_shuffles -> number of vertex shuffles to be executed
-# Returns an array of graph as incidence matrix
-# where inc is the modified incidence matrix
-def randomize_edges(adj, num_shuffles):
+# guard_limit -> maximum number of failed swap attempts
+# plots -> True/False: will it plot the graph previous to randomization
+# Returns a list [inc, shuffles_done, is_fully_randomized]
+# inc -> the modified incidence matrix
+# shuffles_done -> number of executed edge swaps
+# is_fully_randomized -> True/False: has it performed the given amount of swaps
+def randomize_edges(adj, num_shuffles, guard_limit=200, plots=False):
 
     inc = adjacency_matrix_to_incidence_matrix(adj)
+    if plots:
+        graph = create_igraph_from_incidence_matrix(inc)
+        plot_igraph_on_circle(graph)
     num_vertices = len(inc)
     num_edges = len(inc[0]) - 1
 
-    for _ in range(num_shuffles):
+    shuffles_done = 0
+    guard = 0
+    while shuffles_done < num_shuffles:
         edge_one_col, edge_two_col, edge_one_vertices, edge_two_vertices = roll_edges(inc, num_vertices, num_edges)
 
         # If vertex one in edges one and two is the same vertex
-        if edge_one_vertices[0] == edge_two_vertices[0]:
-            # Swap second vertex
-            swap_between_columns(edge_one_vertices[1], edge_one_col, edge_two_col, inc)
-            swap_between_columns(edge_two_vertices[1], edge_one_col, edge_two_col, inc)
+        if  edge_one_vertices[0] == edge_two_vertices[0] \
+            or edge_one_vertices[1] == edge_two_vertices[1] \
+            or edge_one_vertices[1] == edge_two_vertices[0] \
+            or edge_one_vertices[0] == edge_two_vertices[1] \
+            or is_duplicate_edge(inc, edge_one_vertices[0], edge_two_vertices[1], edge_two_col) \
+            or is_duplicate_edge(inc, edge_two_vertices[0], edge_one_vertices[1], edge_one_col):
+
+            guard += 1
+            if guard > guard_limit:
+                return [inc, shuffles_done, False]
+            else:
+                continue
         else:
             # Swap first vertex
             swap_between_columns(edge_one_vertices[0], edge_one_col, edge_two_col, inc)
             swap_between_columns(edge_two_vertices[0], edge_one_col, edge_two_col, inc)
-    return inc
+            shuffles_done += 1
+
+    return [inc, shuffles_done, True]
 
 def test_randomization(filename=None, output_format=None, num_shuffles=None, plots=None):
     if filename == None:
         adj = retrieve_adjacency_matrix_from_user()
     else:
-        adj, _ = read_matrix_from_file(filename)
+        matrix, rep = read_matrix_from_file(filename)
+        adj = rep.convert_func(MatrixRepresentation.AdjacencyMatrix)(matrix)
     
     if num_shuffles == None:
         num_shuffles = int(input("Podaj liczbe randomizacji.\n"))
@@ -108,8 +129,8 @@ def test_randomization(filename=None, output_format=None, num_shuffles=None, plo
     graph = create_igraph_from_incidence_matrix(start_incidence)
     if plots: plot_igraph_on_circle(graph)
 
-    randomized_incidence = randomize_edges(adj, num_shuffles)
-    print("Po randomizacji:")
+    [randomized_incidence, shuffles_done, is_fully_randomized] = randomize_edges(adj, num_shuffles, False)
+    print(f"Po randomizacji {shuffles_done} razy:")
     graph_print(representation, randomized_incidence, output_format)
     graph = create_igraph_from_incidence_matrix(randomized_incidence)
     if plots: plot_igraph_on_circle(graph)
