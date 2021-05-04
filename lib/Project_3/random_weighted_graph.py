@@ -31,6 +31,8 @@ def retrieve_random_graph_from_user():
 
 def retrieve_largest_component(adjacency_matrix):
     g = Graph.Adjacency(adjacency_matrix)
+    if len(adjacency_matrix) == 0:
+        return None
     largest = g.clusters().giant()
     return [i for i in largest.get_adjacency()]
 
@@ -38,7 +40,7 @@ def retrieve_largest_component(adjacency_matrix):
 def assign_weights_to_graph(adjacency_matrix, min_weight, max_weight):
     random.seed()
     (nonzero_i, nonzero_j) = np.nonzero(adjacency_matrix)
-    size = adjacency_matrix.size
+    size = len(adjacency_matrix[0])
     result = np.zeros((size, size))
     for k in range(nonzero_i.size):
         i = nonzero_i[k]
@@ -51,7 +53,6 @@ def generate_random_weighted_graph_adjacency():
     adjacency_matrix_initial = retrieve_random_graph_from_user()
     largest_connected = np.array(retrieve_largest_component(adjacency_matrix_initial))
     if largest_connected.size == 1:  # discard empty graph
-        print('Generowanie grafu nie powiodlo sie. Sprobuj jeszcze raz.\n')
-        return generate_random_weighted_graph_adjacency()
+        return None
     adjacency_matrix = assign_weights_to_graph(largest_connected, 1, 10)
     return adjacency_matrix

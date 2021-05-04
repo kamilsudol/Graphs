@@ -1,8 +1,8 @@
 from igraph import *
 
+from lib.Project_3.dijkstras import dijkstra_find_and_print_shortest_paths
 from lib.Project_3.random_weighted_graph import generate_random_weighted_graph_adjacency
-from lib.Project_3.weighted_graph import create_weighted_igraph_from_adjacency
-from lib.Project_3.weighted_graph import plot_weighted_igraph_on_circle
+from lib.Project_3.weighted_graph import plot_weighted_graph_on_circle
 
 
 def do_nothing():
@@ -31,7 +31,7 @@ def get_exercise_index():
 if __name__ == '__main__':
     exercises = [
         generate_random_weighted_graph_adjacency,
-        do_nothing,
+        dijkstra_find_and_print_shortest_paths,
         do_nothing,
         do_nothing,
         do_nothing
@@ -47,7 +47,9 @@ if __name__ == '__main__':
                 print('Blad: Graf nie zostal jeszcze wygenerowany. Wpisz \'1\' aby wygenerowac graf.\n')
             elif exercise_index == 0:
                 graph_adjacency_matrix = generate_random_weighted_graph_adjacency()
-                g = create_weighted_igraph_from_adjacency(graph_adjacency_matrix)
-                plot_weighted_igraph_on_circle(g)
+                while not graph_adjacency_matrix:
+                    print('Blad generowania grafu. Sprobuj jeszcze raz.')
+                    graph_adjacency_matrix = generate_random_weighted_graph_adjacency()
+                plot_weighted_graph_on_circle(graph_adjacency_matrix)
             else:
                 exercises[exercise_index](graph_adjacency_matrix)
