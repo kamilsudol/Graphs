@@ -1,8 +1,10 @@
 from igraph import *
 
-from lib.Project_3.dijkstras import dijkstra_find_and_print_shortest_paths
 from lib.Project_3.random_weighted_graph import generate_random_weighted_graph_adjacency
 from lib.Project_3.weighted_graph import plot_weighted_graph_on_circle
+from lib.Project_3.dijkstras import dijkstra_find_and_print_shortest_paths
+from lib.Project_3.dijkstras import print_shortest_paths_table
+from lib.Project_3.dijkstras import print_graph_centers
 
 
 def do_nothing():
@@ -32,8 +34,8 @@ if __name__ == '__main__':
     exercises = [
         generate_random_weighted_graph_adjacency,
         dijkstra_find_and_print_shortest_paths,
-        do_nothing,
-        do_nothing,
+        print_shortest_paths_table,
+        print_graph_centers,
         do_nothing
     ]
     graph_adjacency_matrix = None

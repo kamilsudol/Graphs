@@ -26,11 +26,11 @@ def dijkstra_find_shortest_paths(adjacency_matrix, starting_vertex=0):
         for v in not_calculated_u_neighbours:
             relax(u, v, distance, previous, adjacency_matrix)
 
-    return previous, distance
+    return distance, previous
 
 
 def dijkstra_find_and_print_shortest_paths(adjacency_matrix, starting_vertex=0):
-    (previous, distance) = dijkstra_find_shortest_paths(adjacency_matrix, starting_vertex)
+    (distance, previous) = dijkstra_find_shortest_paths(adjacency_matrix, starting_vertex)
     print('START: s = {}'.format(starting_vertex + 1))
     for i in range(len(distance)):
         path = []
@@ -41,3 +41,36 @@ def dijkstra_find_and_print_shortest_paths(adjacency_matrix, starting_vertex=0):
         path.append(k)
         path_formatted = list(map(lambda j: j+1, path))[::-1]
         print('distance({}) = {} ==> {}'.format(i + 1, distance[i], path_formatted))
+
+
+def get_shortest_paths_table(adjacency_matrix):
+    res = []
+    for i in range(len(adjacency_matrix[0])):
+        (d, _) = dijkstra_find_shortest_paths(adjacency_matrix, i)
+        res.append(d)
+    return res
+
+
+def print_shortest_paths_table(adjacency_matrix):
+    distances = get_shortest_paths_table(adjacency_matrix)
+    for row in distances:
+        for d in row:
+            print('{:<2d} '.format(int(d)), end='')
+        print()
+
+
+def find_graph_center(adjacency_matrix):
+    distances = get_shortest_paths_table(adjacency_matrix)
+    sums = [sum(row) for row in distances]
+    return sums.index(min(sums))
+
+
+def find_minmax_center(adjacency_matrix):
+    distances = get_shortest_paths_table(adjacency_matrix)
+    maxes = [max(row) for row in distances]
+    return maxes.index(min(maxes))
+
+
+def print_graph_centers(adjacency_matrix):
+    print('Centrum grafu to wezel {}'.format(find_graph_center(adjacency_matrix) + 1))
+    print('Centrum minmax to wezel {}'.format(find_minmax_center(adjacency_matrix) + 1))
