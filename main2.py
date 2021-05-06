@@ -46,9 +46,17 @@ if __name__ == '__main__':
             print("Wystąpił błąd\n")
 
     if run_from_cl:
-        if task == 2:
+        if task == 1:
+            exercises[task - 1](args['plots'])
+        elif task == 2:
             exercises[task - 1](args['filename'], args['output'], args['shuffles'], args['plots'])
+        elif task == 3:
+            exercises[task - 1](args['filename'], args['plots'])
         elif task == 4:
             exercises[task - 1](args['filename'], args['minv'], args['maxv'], args['shuffles'], args['plots'])
+        elif task == 5:
+            exercises[task - 1](args['vertices'], args['regularity'])
+        elif task == 6:
+            exercises[task - 1](args['filename'], args['plots'])
         else:
             print('Can\'t run this from command line')

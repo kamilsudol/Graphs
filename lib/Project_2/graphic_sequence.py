@@ -32,13 +32,14 @@ def is_graphic_sequence(seq):
         seq = seq[::-1]
 
 
-def test_graphic_sequence():
+def test_graphic_sequence(plot=None):
     seq = load_sequence()
     res = is_graphic_sequence(seq)
 
     if res is not False:
         print("Ciag jest graficzny")
         graph = create_igraph_from_adjacency_matrix(res)
-        plot_igraph_on_circle(graph)
+        if plot is None or plot == 'y':
+            plot_igraph_on_circle(graph)
     else:
         print("Ciag nie jest graficzny")
