@@ -41,7 +41,10 @@ class MatrixRepresentation(Enum):
             MatrixRepresentation.AdjacencyMatrix.name + MatrixRepresentation.List.name: adjacency_matrix_to_list,
             MatrixRepresentation.List.name + MatrixRepresentation.AdjacencyMatrix.name: list_to_adjacency_matrix,
             MatrixRepresentation.AdjacencyMatrix.name + MatrixRepresentation.IncidenceMatrix.name: adjacency_matrix_to_incidence_matrix,
-            MatrixRepresentation.IncidenceMatrix.name + MatrixRepresentation.AdjacencyMatrix.name: incidence_matrix_to_adjacency_matrix
+            MatrixRepresentation.IncidenceMatrix.name + MatrixRepresentation.AdjacencyMatrix.name: incidence_matrix_to_adjacency_matrix,
+            MatrixRepresentation.UndeterminedMatrix.name + MatrixRepresentation.IncidenceMatrix.name: adjacency_matrix_to_incidence_matrix,
+            MatrixRepresentation.UndeterminedMatrix.name + MatrixRepresentation.AdjacencyMatrix.name: incidence_matrix_to_adjacency_matrix,
+            MatrixRepresentation.UndeterminedMatrix.name + MatrixRepresentation.List.name: incidence_matrix_to_list
         }
 
     def convert_func(self, to):
