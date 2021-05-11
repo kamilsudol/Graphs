@@ -101,7 +101,7 @@ def load_list(filename):
         with open(filename, 'r') as file:
             for x in file:
                 matrix.append(list(map(int, filter(None, re.split(' |\n', x.split(".")[1])))))
-    except:
+    except IOError:
         print("Brak pliku o podanej nazwie!")
         raise ValueError
 
@@ -115,7 +115,7 @@ def load_matrix(filename):
         with open(filename, 'r') as file:
             for x in file:
                 matrix.append(list(map(int, filter(None, re.split('\n| ', x)))))
-    except:
+    except IOError:
         print("Brak pliku o podanej nazwie!")
         raise ValueError
 
