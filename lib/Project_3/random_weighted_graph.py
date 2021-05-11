@@ -4,18 +4,12 @@ import numpy as np
 from igraph import *
 
 from lib.Project_1.random_graph import random_graph_edges, random_graph_probability
+from lib.Utils.decorators import retry_on_value_error
 
-
+@retry_on_value_error
 def retrieve_random_graph_from_user():
-    try:
-        input_type = int(input('Wpisz 1 aby wylosowac graf G(n, l).\n'
-                               'Wpisz 2 aby wylosowac graf G(n, p).\n').strip())
-    except ValueError:
-        print('Blad: podano niepoprawna wartosc.')
-        return retrieve_random_graph_from_user()
-    except KeyboardInterrupt:
-        print('Zamykanie programu...')
-        sys.exit(0)
+    input_type = int(input('Wpisz 1 aby wylosowac graf G(n, l).\n'
+                            'Wpisz 2 aby wylosowac graf G(n, p).\n').strip())
 
     if input_type == 1:
         nv = int(input('Podaj ilosc wezlow: ').strip())
@@ -26,7 +20,7 @@ def retrieve_random_graph_from_user():
         p = float(input('Podaj prawdopodobienstwo istnienia krawedzi: ').strip())
         return random_graph_probability(nv, p)
     else:
-        print('Wybrano niepoprawna opcje.')
+        raise ValueError
 
 
 def retrieve_largest_component(adjacency_matrix):
