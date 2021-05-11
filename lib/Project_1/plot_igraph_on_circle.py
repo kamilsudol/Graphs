@@ -6,6 +6,11 @@ from .TextResizer import *
 
 # output fits inside [0, 1] x [0, 1] square
 def span_vertices_on_circle(num_of_vertices):
+    if num_of_vertices < 0:
+        raise ValueError()
+    elif num_of_vertices == 1:
+        return [[0.5, 0.5]];
+
     scaling_factor = 0.2  # bigger => more space outside main, invisible circle and boundaries of region
 
     vertices = []
@@ -24,7 +29,7 @@ def distance(p1, p2):
 
 
 def plot_vertices(vertices, ax, colormap):
-    circle_radius = min(distance(vertices[0], vertices[1]) / 2.3, 0.04)
+    circle_radius = min(distance(vertices[0], vertices[1]) / 2.3, 0.04) if len(vertices) > 1 else 0.4
     label_from_1 = 1
     if colormap is None:
         colormap = ['r']  * (len(vertices) + 1)
