@@ -22,6 +22,7 @@ class ArgumentsSingleton():
             self.ap.add_argument("-p", "--plots", required=False, help="will it plot? y/n")
             self.ap.add_argument("-v", "--vertices", required=False, help="number of vertices", type=int)
             self.ap.add_argument("-k", "--regularity", required=False, help="degree of regularity", type=int)
+            self.ap.add_argument("-seq", "--sequence", required=False, help="graphic sequence representation")
             self.ap.add_argument("--minv", required=False, help="minimum vertices", type=int)
             self.ap.add_argument("--maxv", required=False, help="maximum vertices", type=int)
             self.arguments = vars(self.ap.parse_args())

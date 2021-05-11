@@ -97,9 +97,13 @@ def resolve_representation_type_from_input(output_format):
 def load_list(filename):
     matrix = []
     
-    with open(filename, 'r') as file:
-        for x in file:
-            matrix.append(list(map(int, filter(None, re.split(' |\n', x.split(".")[1])))))
+    try:
+        with open(filename, 'r') as file:
+            for x in file:
+                matrix.append(list(map(int, filter(None, re.split(' |\n', x.split(".")[1])))))
+    except:
+        print("Brak pliku o podanej nazwie!")
+        raise ValueError
 
     return matrix
 
@@ -107,9 +111,13 @@ def load_list(filename):
 def load_matrix(filename):
     matrix = []
     
-    with open(filename, 'r') as file:
-        for x in file:
-            matrix.append(list(map(int, filter(None, re.split('\n| ', x)))))
+    try:
+        with open(filename, 'r') as file:
+            for x in file:
+                matrix.append(list(map(int, filter(None, re.split('\n| ', x)))))
+    except:
+        print("Brak pliku o podanej nazwie!")
+        raise ValueError
 
     return matrix
 
