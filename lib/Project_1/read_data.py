@@ -47,7 +47,7 @@ def graph_print(matrix_representation_kind, matrix, output_format=None):
 
 def check_adjacency(matrix):
     for i in range(len(matrix)):
-        for j in range(int(i / 2)):
+        for j in range(i):
             if int(matrix[i][j]) != int(matrix[j][i]):
                 return False
         if int(matrix[i][i]) != 0:
@@ -81,7 +81,7 @@ def resolve_matrix_type(matrix):
             return MatrixRepresentation.IncidenceMatrix
 
     print("Wrong input!")
-    SystemExit(1)
+    raise ValueError
 
 def resolve_representation_type_from_input(output_format):
     if output_format == 'adj':
@@ -92,7 +92,7 @@ def resolve_representation_type_from_input(output_format):
         return MatrixRepresentation.List
 
     print("Wrong input!")
-    SystemExit(1)
+    raise ValueError
 
 def load_list(filename):
     matrix = []
