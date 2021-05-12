@@ -20,7 +20,7 @@ def get_exercise_index():
         ' - 3 - Wyznacz macierz odleglosci miedzy wszystkimi parami wierzcholkow\n'
         ' - 4 - Wyznacz centrum i centrum minmax grafu\n'
         ' - 5 - Wyznacz minimalne drzewo rozpinajace\n'
-        ' - 6 - Zakoncz\n').strip()) - 1
+        ' - 6 - Zakoncz\n> ').strip()) - 1
 
     if index < 0 or index > 5:
         raise ValueError 

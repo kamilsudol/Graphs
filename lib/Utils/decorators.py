@@ -5,7 +5,7 @@ def retry_on_value_error(function):
     @wraps(function)
     def wrapped_function(*args, **kwargs):
         try:
-            return function()
+            return function(*args, **kwargs)
         except ValueError:
             print('Blad: podano niepoprawna wartosc.')
             return wrapped_function(*args, **kwargs)

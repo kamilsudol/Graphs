@@ -3,6 +3,7 @@ from lib.Project_1.MatrixRepresentation import MatrixRepresentation
 from lib.Project_1.matrix_conversions import incidence_matrix_to_adjacency_matrix, list_to_adjacency_matrix
 from lib.Project_1.random_graph import random_graph_edges, random_graph_probability
 from lib.Project_1.read_data import read_matrix_from_file
+from lib.Utils.decorators import retry_on_value_error
 
 
 # reading graph from file as an adjacency matrix
@@ -27,17 +28,12 @@ def any_representation_to_adjacency_matrix(matrix, matrix_representation):
     return None
 
 
+@retry_on_value_error
 def retrieve_adjacency_matrix_from_user():
-    try:
-        input_type = int(input('Wpisz 1 aby podac plik zawierajacy dowolna reprezentacje grafu.\n'
-                               'Wpisz 2 aby wylosowac graf G(n, l).\n'
-                               'Wpisz 3 aby wylosowac graf G(n, p).\n'
-                               'Wpisz 4 aby wczytac graf z ciagu graficznego\n').strip())
-    except ValueError:
-        print('Blad: podano niepoprawna wartosc.')
-        raise ValueError
-    except KeyboardInterrupt:
-        raise ValueError
+    input_type = int(input('Wpisz 1 aby podac plik zawierajacy dowolna reprezentacje grafu.\n'
+                            'Wpisz 2 aby wylosowac graf G(n, l).\n'
+                            'Wpisz 3 aby wylosowac graf G(n, p).\n'
+                            'Wpisz 4 aby wczytac graf z ciagu graficznego\n').strip())
 
     if input_type == 1:
         return graph_file_read()
@@ -59,5 +55,4 @@ def retrieve_adjacency_matrix_from_user():
             print("Ciag nie jest graficzny")
             raise ValueError
     else:
-        print('Wybrano niepoprawna opcje.')
         raise ValueError
