@@ -2,6 +2,8 @@ from lib.Project_1.matrix_conversions import adjacency_matrix_to_list
 from lib.Project_1.igraph_creation import create_igraph_from_adjacency_matrix
 from lib.Project_1.plot_igraph_on_circle import plot_igraph_on_circle
 from .retrieve_adj_matrix_from_user import retrieve_adjacency_matrix_from_user
+from lib.Project_1.read_data import read_matrix_from_file
+from lib.Project_1.MatrixRepresentation import MatrixRepresentation
 
 import numpy as np
 import random as rnd
@@ -58,11 +60,17 @@ def create_colormap(list):
     return colormap
 
 
-def find_largest_connected_component():  # 3 3 2 2 2 2 2 2 2
-    result = retrieve_adjacency_matrix_from_user()
+def find_largest_connected_component(filename=None, plot=None):  # 3 3 2 2 2 2 2 2 2
+    if filename is None:
+        result = retrieve_adjacency_matrix_from_user()
+    else:
+        matrix, rep = read_matrix_from_file(filename)
+        result = rep.convert_func(MatrixRepresentation.AdjacencyMatrix)(matrix)
+
     graph = adjacency_matrix_to_list(result)
     g = create_igraph_from_adjacency_matrix(result)
     connected_components_list = components(graph)
     largest(connected_components_list)
     colormap = create_colormap(connected_components_list)
-    plot_igraph_on_circle(g, colormap)
+    if plot is None or plot == 'y':
+        plot_igraph_on_circle(g, colormap)

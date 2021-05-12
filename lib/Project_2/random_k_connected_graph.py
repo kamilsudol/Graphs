@@ -40,7 +40,7 @@ def generate_random_k_connected_graph(vertices, k):
                 break
 
             adj_matrix[ seq[index_from]['vertex'] ][ seq[index_to]['vertex'] ] = adj_matrix[ seq[index_to]['vertex'] ][ seq[index_from]['vertex'] ] = 1
-        
+
             if seq[index_from]['neighbors'] == 1:
                 seq = np.delete(seq, index_from, 0)
                 if index_to > index_from:
@@ -53,15 +53,15 @@ def generate_random_k_connected_graph(vertices, k):
             else:
                 seq[index_to]['neighbors'] -= 1
 
-    
+
     print("Ilość prób: " + str(retries + 1))
     return None
 
-def generate_and_show_random_k_connected_graph():
+def generate_and_show_random_k_connected_graph(vertices=None, k=None):
     rng.seed()
 
     while True:
-        vertices, k = [int(i) for i in input("Wprowadz liczbe wierzcholkow i stopien k regularnosci\n> ").strip().split(" ")]
+        if vertices is None or k is None: vertices, k = [int(i) for i in input("Wprowadz liczbe wierzcholkow i stopien k regularnosci\n> ").strip().split(" ")]
         random_adj = generate_random_k_connected_graph(vertices, k)
 
         if random_adj is not None:
@@ -70,3 +70,4 @@ def generate_and_show_random_k_connected_graph():
             return
         else:
             print("Nie udalo sie utworzyc grafu\n\n")
+            return

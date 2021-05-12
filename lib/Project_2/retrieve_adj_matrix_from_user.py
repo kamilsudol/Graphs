@@ -23,7 +23,7 @@ def any_representation_to_adjacency_matrix(matrix, matrix_representation):
         return list_to_adjacency_matrix(matrix)
     elif matrix_representation == MatrixRepresentation.AdjacencyMatrix:
         return matrix
-    elif matrix_representation == MatrixRepresentation.IncidenceMatrix:
+    elif matrix_representation == MatrixRepresentation.IncidenceMatrix or matrix_representation == MatrixRepresentation.UndeterminedMatrix:
         return incidence_matrix_to_adjacency_matrix(matrix)
     return None
 

@@ -21,20 +21,33 @@ def print_matrix(matrix):
         print(string)
 
 
-def graph_print(matrix_representation_kind, matrix):
-    matrix_representation_out = MatrixRepresentation(int(input("Wskaż format wyjściowy macierzy\n - 0 - lista "
+# def graph_print(matrix_representation_kind, matrix):
+#     matrix_representation_out = MatrixRepresentation(int(input("Wskaż format wyjściowy macierzy\n - 0 - lista "
+#                                                                "sąsiedztwa\n - 1 - macierz incydencji\n - 2 - macierz"
+#                                                                " sąsiedztwa\n> ")))
+#     converted = matrix_representation_kind.convert_func(matrix_representation_out)(matrix)
+#     if matrix_representation_out == MatrixRepresentation.List:
+#         print_list(converted)
+#     else:
+#         print_matrix(converted)
+
+def graph_print(matrix_representation_kind, matrix, output_format=None):
+    if output_format == None:
+        matrix_representation_out = MatrixRepresentation(int(input("Wskaż format wyjściowy macierzy\n - 0 - lista "
                                                                "sąsiedztwa\n - 1 - macierz incydencji\n - 2 - macierz"
                                                                " sąsiedztwa\n> ")))
+    else:
+        matrix_representation_out = resolve_representation_type_from_input(output_format)
+
     converted = matrix_representation_kind.convert_func(matrix_representation_out)(matrix)
     if matrix_representation_out == MatrixRepresentation.List:
         print_list(converted)
     else:
         print_matrix(converted)
 
-
 def check_adjacency(matrix):
     for i in range(len(matrix)):
-        for j in range(int(i / 2)):
+        for j in range(i):
             if int(matrix[i][j]) != int(matrix[j][i]):
                 return False
         if int(matrix[i][i]) != 0:
@@ -68,15 +81,29 @@ def resolve_matrix_type(matrix):
             return MatrixRepresentation.IncidenceMatrix
 
     print("Wrong input!")
-    SystemExit(1)
+    raise ValueError
 
+def resolve_representation_type_from_input(output_format):
+    if output_format == 'adj':
+        return MatrixRepresentation.AdjacencyMatrix
+    elif output_format == 'inc':
+        return MatrixRepresentation.IncidenceMatrix
+    elif output_format == 'list':
+        return MatrixRepresentation.List
+
+    print("Wrong input!")
+    raise ValueError
 
 def load_list(filename):
     matrix = []
     
-    with open(filename, 'r') as file:
-        for x in file:
-            matrix.append(list(map(int, filter(None, re.split(' |\n', x.split(".")[1])))))
+    try:
+        with open(filename, 'r') as file:
+            for x in file:
+                matrix.append(list(map(int, filter(None, re.split(' |\n', x.split(".")[1])))))
+    except IOError:
+        print("Brak pliku o podanej nazwie!")
+        raise ValueError
 
     return matrix
 
@@ -84,9 +111,13 @@ def load_list(filename):
 def load_matrix(filename):
     matrix = []
     
-    with open(filename, 'r') as file:
-        for x in file:
-            matrix.append(list(map(int, filter(None, re.split('\n| ', x)))))
+    try:
+        with open(filename, 'r') as file:
+            for x in file:
+                matrix.append(list(map(int, filter(None, re.split('\n| ', x)))))
+    except IOError:
+        print("Brak pliku o podanej nazwie!")
+        raise ValueError
 
     return matrix
 

@@ -1,28 +1,31 @@
+from math import floor
+from lib.Project_2.largest_connected_component import components
+from lib.Project_2.graphic_sequence import is_graphic_sequence
+from lib.Project_1.MatrixRepresentation import MatrixRepresentation
+from lib.Project_1.read_data import graph_print, read_matrix_from_file
 import lib.Project_1.matrix_conversions as matconv
 import lib.Project_1.random_graph as rngraph
 import lib.Project_1.igraph_creation as icreate
 import lib.Project_1.plot_igraph_on_circle as plot
-from . import edge_randomizer as edrng
-from . import largest_connected_component as largcomp
+import lib.Project_2.edge_randomizer as edrng
+import lib.Project_2.largest_connected_component as largcomp
 import random as rng
 
-# Check if the incidence matrix already contains an edge which you want to add
+# Check if the incidence matrix already contains an edge
 # inc -> incidence matrix
-# v_one -> row index of vertex one in incidence matrix 
-# v_two -> row index of vertex two in incidence matrix 
+# v_one -> row index of vertex one in checked edge
+# v_two -> row index of vertex two in checked edge
 # checked_edge -> column index of the checked edge
 # Returns True if there is a duplicate, False otherwise
 def is_duplicate_edge(inc, v_one, v_two, checked_edge):
     # Get row indexes of vertices in checked edge
-    [vertex_one_checked, _] = edrng.find_vertices(len(inc), inc, checked_edge)
-    vertex_two_checked = v_two
     for edge in range(len(inc[v_one])):
         if edge != checked_edge:
             #  Get row indexes of vertices in current edge
             [vertex_one_temp, vertex_two_temp] = edrng.find_vertices(len(inc), inc, edge)
 
             # Check if the vertices in current edge are the same as those in checked edge
-            if vertex_one_checked == vertex_one_temp and vertex_two_checked == vertex_two_temp:
+            if v_one == vertex_one_temp and v_two == vertex_two_temp:
                 return True
     return False
 
@@ -43,6 +46,7 @@ def calculate_graphic_seq_from_incidence(inc, num_vertices):
     
     return graphic_seq
 
+#DEPRECATED
 # Rewire edge by changing to which vertices it connects
 # inc -> incidence matrix
 # v_one -> row index of vertex one in incidence matrix
@@ -91,6 +95,7 @@ def is_eulerian(graphic_seq):
 
     return eulerian
 
+#DEPRECATED
 # Relabels vertices of a graph component to make it a standalone graph
 # Gets rid of missing vertices
 # component_adj_list -> adjacency list of a graph component
@@ -100,16 +105,17 @@ def component_to_graph(component_adj_list, component_vertex_indexes):
     num_vertices = len(component_vertex_indexes)
     new_indexes = []
     new_adj_list = component_adj_list
-
+    print(f'component: {component_adj_list}')
     for vertex in range(num_vertices):
         new_indexes.append(vertex+1)
         for neighbors in range(len(new_adj_list)):
             for neighbor in range(len(new_adj_list[neighbors])):
                 if new_adj_list[neighbors][neighbor] == component_vertex_indexes[vertex]:
                     new_adj_list[neighbors][neighbor] = vertex+1
-    
+    print(f'graph: {new_adj_list}')
     return new_adj_list
 
+#DEPRECATED
 # Get the iterator of the largest graph component from components list
 # components_list -> list of graph components which are represented by lists of member vertices
 # Returns the iterator 
@@ -126,6 +132,7 @@ def get_largest_component_iterator(components_list):
 
     return max_it
 
+#DEPRECATED
 # Fix the "all vertex degrees even" condition of graphic sequence
 def fix_graphic_seq_condition(inc, graphic_seq):
     new_graphic_seq = graphic_seq
@@ -139,12 +146,15 @@ def fix_graphic_seq_condition(inc, graphic_seq):
                 # If degree of vertex two is odd
                 if graphic_seq[v_two_idx] % 2 != 0:
                     # Rewire an edge between rows of vertex one and two which are both odd
+                    # graph_print(MatrixRepresentation.IncidenceMatrix, inc, 'inc')
                     inc = rewire_edge(inc, v_one_idx, v_two_idx)
+                    # graph_print(MatrixRepresentation.IncidenceMatrix, inc, 'inc')
                     new_graphic_seq = calculate_graphic_seq_from_incidence(inc, len(graphic_seq))
                     break
     
-    return new_graphic_seq
+    return [inc, new_graphic_seq]
 
+#DEPRECATED
 # Generate a random graph with even number of edges
 # Graph has vertices in range of [min_vert, max_vert]
 # Graph has edges in range of [min_edges, max_edges]
@@ -163,6 +173,7 @@ def get_random_eulerian_candidate(min_vert, max_vert, min_edges, max_edges):
 
     return matconv.adjacency_matrix_to_list(rngraph.random_graph_edges(num_vertices, num_edges))
 
+#DEPRECATED
 # Finds and relabels the largest component of a graph
 # adj_list -> graph as adjacency list
 # Returns largest component as adjacency list
@@ -181,42 +192,35 @@ def get_candidates_largest_component(adj_list):
 
     return component_to_graph(largest_adj_list, largest_component_vertex_indexes)
 
-# Generates a graph and makes it eulerian
+# Generates a eulerian graph
 # Graph has vertices in range of [min_vert, max_vert]
-# Graph has edges in range of [min_edges, max_edges]
+# Graph is randomized through edge swaps up to 'num_shuffles' times
+# ^ Check edrng.randomize_edges
 # min_vert -> minimum number of vertices
 # max_vert -> maximum number of vertices
-# min_edges -> minimum number of edges
-# max_edges -> maximum number of edges
-# Returns the graph as incidence matrix 
-# or empty array if it generated a graph that couldn't be made eulerian
-def get_random_eulerian_graph(min_vert, max_vert, min_edges, max_edges):
-    # Fetch adjacency list of a random graph with even number of edges
-    candidate_list = get_random_eulerian_candidate(min_vert, max_vert, min_edges, max_edges)
+# num_shuffles -> target number of edge swaps
+# Returns a list [inc, shuffles_done, is_fully_randomized]
+# inc -> incidence matrix of the graph
+# shuffles_done -> number of edge swaps executed
+# is_fully_randomized -> True/False: has it been randomized 'num_shuffles' times. 
+def get_random_eulerian_graph(min_vert, max_vert, num_shuffles):
+    while True:
+        num_vertices = rng.randint(min_vert, max_vert)
+        graph_seq = []
 
-    # Fetch adjacency list of the largest component of generated graph
-    largest_candidate_list = get_candidates_largest_component(candidate_list)
-    
-    # Get graphic sequence of generated graph
-    graphic_seq = []
-    for vertex in largest_candidate_list:
-        graphic_seq.append(len(vertex))
-    
-    # Get incidence matrix of generated graph
-    inc = matconv.list_to_incidence_matrix(largest_candidate_list)
+        for _ in range(num_vertices):
+            val = rng.randint(1, floor(num_vertices/2) - 1) * 2
+            graph_seq.append(val)
 
-    old_graphic_seq = []
-    not_eulerian = True
-    while not_eulerian:
-        # Fix "all vertex degrees even" condition, if it can't be done return []
-        old_graphic_seq = graphic_seq
-        graphic_seq = fix_graphic_seq_condition(inc, graphic_seq)
-        if old_graphic_seq == graphic_seq:
-            return []
+        adj = is_graphic_sequence(graph_seq)
+        if adj is not False:
+            components_list = components(matconv.adjacency_matrix_to_list(adj))
 
-        not_eulerian = not(is_eulerian(graphic_seq))
+            if len(components_list) == 1: 
+                [inc, shuffles_done, is_fully_randomized] = edrng.randomize_edges(adj, num_shuffles)
+                if shuffles_done > 0: break
 
-    return inc
+    return [inc, shuffles_done, is_fully_randomized]
 
 # Removes an edge from adjacency list of a graph
 # The edge is removed between v_one and another vertex specified by it's index in v_one's neighbors
@@ -261,15 +265,47 @@ def find_eulerian_cycle(adj_list):
 
     return eulerian_cycle
 
-def test_eulerian_cycle():
+def test_eulerian_cycle(filename=None, min_vert=20, max_vert=50, num_shuffles=100, plots=None):
+    if min_vert == None: min_vert = 20
+    if max_vert == None: max_vert = 50
+    if num_shuffles == None: num_shuffles = 100
+
+    if plots == None or plots == 'y':
+        plots = True
+    elif plots == 'n':
+        plots = False
+
     inc = []
     while len(inc) < 2:
-        inc = get_random_eulerian_graph(6, 15, 4, 24)
-        if len(inc) != 0:
-            print("Ciag graficzny grafu eulerowskiego: ", calculate_graphic_seq_from_incidence(inc, len(inc)))
+        if filename == None:
+            [inc, shuffles_done, is_fully_randomized] = get_random_eulerian_graph(min_vert, max_vert, num_shuffles)
+            print(f'Wykonane zamiany krawedzi: {shuffles_done}')
+            while shuffles_done == 0:
+                print("Randomization unsuccessful!")
+                [inc, shuffles_done, is_fully_randomized] = get_random_eulerian_graph(min_vert, max_vert, num_shuffles)
+        else:
+            [input_graph, input_representation] = read_matrix_from_file(filename)
+            inc = input_representation.convert_func(MatrixRepresentation.IncidenceMatrix)(input_graph)
 
+        if len(inc) == 0: 
+            print("Generation or input failed!")
+            continue
+
+        graphic_seq = calculate_graphic_seq_from_incidence(inc, len(inc))
+        print("Ciag graficzny grafu: ", graphic_seq)
+        if is_eulerian(graphic_seq):
             adj_list = matconv.incidence_matrix_to_list(inc)
-            print("Cykl Eulera: ", find_eulerian_cycle(adj_list))
+            eulerian_cycle = find_eulerian_cycle(adj_list)
+            if eulerian_cycle[0] != eulerian_cycle[-1]:
+                print("Nie znaleziono cyklu Eulera: ", eulerian_cycle)
+            else:
+                print("Cykl Eulera: ", eulerian_cycle)
 
-            graph = icreate.create_igraph_from_incidence_matrix(inc)
-            plot.plot_igraph_on_circle(graph)
+            if plots:
+                graph = icreate.create_igraph_from_incidence_matrix(inc)
+                plot.plot_igraph_on_circle(graph)
+        else:
+            print("Graf nie jest Eulerowski")
+            if plots:
+                graph = icreate.create_igraph_from_incidence_matrix(inc)
+                plot.plot_igraph_on_circle(graph)
