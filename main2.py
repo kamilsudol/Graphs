@@ -1,4 +1,4 @@
-from Arguments import ArgumentsSingleton
+from Arguments_Project_2 import ArgumentsSingleton
 from lib.Project_2.graphic_sequence import test_graphic_sequence
 from lib.Project_2.edge_randomizer import test_randomization
 from lib.Project_2.random_k_connected_graph import generate_and_show_random_k_connected_graph
