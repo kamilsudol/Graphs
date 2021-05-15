@@ -20,7 +20,7 @@ class ArgumentsSingleton:
             self.ap.add_argument("-o", "--output", required=False, help="graph output format: list/inc/adj")
             self.ap.add_argument("-plt", "--plots", required=False, help="will it plot? y/n")
             self.ap.add_argument("-v", "--vertices", required=False, help="number of vertices", type=int)
-            self.ap.add_argument("-p", "--probability", required=False, help="minimum vertices", type=float)
+            self.ap.add_argument("-p", "--probability", required=False, help="probability", type=float)
             self.ap.add_argument("-l", "--edges", required=False, help="number of edges", type=int)
             self.arguments = vars(self.ap.parse_args())
             print(self.arguments)
