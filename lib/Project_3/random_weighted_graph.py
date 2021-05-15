@@ -1,11 +1,27 @@
 import random
 
 import numpy as np
-from igraph import *
 
+from lib.Project_1.matrix_conversions import adjacency_matrix_to_list
 from lib.Project_1.random_graph import random_graph_edges, random_graph_probability
 from lib.Utils.decorators import retry_on_value_error
+from lib.Project_2.largest_connected_component import components
 
+
+# returns result in form of adjacency matrix
+def subgraph_from_list_of_vertices(original_adjacency_matrix, vertices_list):
+    adjacency_indexes = sorted([v-1 for v in vertices_list])
+    size = len(vertices_list)
+    res = [[0] * size for _ in range(size)]
+    for i in range(0, size):
+        v1 = adjacency_indexes[i]
+        for j in range(0, i):
+            v2 = adjacency_indexes[j]
+            res[i][j] = original_adjacency_matrix[v1][v2]
+    return res
+
+
+# generates random adjacency matrix based on input from the user
 @retry_on_value_error
 def retrieve_random_graph_from_user():
     input_type = int(input('Wpisz 1 aby wylosowac graf G(n, l).\n'
@@ -23,14 +39,16 @@ def retrieve_random_graph_from_user():
         raise ValueError
 
 
+# returns resulting adjacency matrix
 def retrieve_largest_component(adjacency_matrix):
-    g = Graph.Adjacency(adjacency_matrix)
     if len(adjacency_matrix) == 0:
         return None
-    largest = g.clusters().giant()
-    return [i for i in largest.get_adjacency()]
+    c = components(adjacency_matrix_to_list(adjacency_matrix))
+    largest = max(c, key=len)
+    return subgraph_from_list_of_vertices(adjacency_matrix, largest)
 
 
+# returns resulting adjacency matrix
 def assign_weights_to_graph(adjacency_matrix, min_weight, max_weight):
     random.seed()
     (nonzero_i, nonzero_j) = np.nonzero(adjacency_matrix)
@@ -43,6 +61,8 @@ def assign_weights_to_graph(adjacency_matrix, min_weight, max_weight):
     return result.tolist()
 
 
+# returns resulting adjacency matrix
+# if graph is not connected will automatically extract largest connected component
 def generate_random_weighted_graph_adjacency():
     adjacency_matrix_initial = retrieve_random_graph_from_user()
     largest_connected = np.array(retrieve_largest_component(adjacency_matrix_initial))

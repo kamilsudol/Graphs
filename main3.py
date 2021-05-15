@@ -5,10 +5,8 @@ from lib.Project_3.weighted_graph import plot_weighted_graph_on_circle
 from lib.Project_3.dijkstras import dijkstra_find_and_print_shortest_paths
 from lib.Project_3.dijkstras import print_shortest_paths_table
 from lib.Project_3.dijkstras import print_graph_centers
+from lib.Project_3.spanning_tree import draw_minimum_spanning_tree
 from lib.Utils.decorators import retry_on_value_error
-
-def do_nothing(*args, **kwargs):
-    pass
 
 
 @retry_on_value_error
@@ -38,13 +36,14 @@ def randomize_and_plot_graph():
 
     return graph_adjacency_matrix
 
+
 if __name__ == '__main__':
     exercises = [
         randomize_and_plot_graph,
         dijkstra_find_and_print_shortest_paths,
         print_shortest_paths_table,
         print_graph_centers,
-        do_nothing
+        draw_minimum_spanning_tree
     ]
     graph_adjacency_matrix = None
 
@@ -57,9 +56,9 @@ if __name__ == '__main__':
                 print('Blad: Graf nie zostal jeszcze wygenerowany. Wpisz \'1\' aby wygenerowac graf.\n')
             elif exercise_index == 0:
                 graph_adjacency_matrix = retry_on_value_error(
-                    lambda : exercises[exercise_index]()
+                    lambda: exercises[exercise_index]()
                 )()
             else:
                 retry_on_value_error(
-                    lambda : exercises[exercise_index](graph_adjacency_matrix)
+                    lambda: exercises[exercise_index](graph_adjacency_matrix)
                 )()

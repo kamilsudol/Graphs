@@ -62,15 +62,21 @@ def print_shortest_paths_table(adjacency_matrix):
 def find_graph_center(adjacency_matrix):
     distances = get_shortest_paths_table(adjacency_matrix)
     sums = [sum(row) for row in distances]
-    return sums.index(min(sums))
+    min_val = min(sums)
+    return [sums.index(min_val), min_val]
 
 
 def find_minmax_center(adjacency_matrix):
     distances = get_shortest_paths_table(adjacency_matrix)
     maxes = [max(row) for row in distances]
-    return maxes.index(min(maxes))
+    min_val = min(maxes)
+    return [maxes.index(min_val), min_val]
 
 
 def print_graph_centers(adjacency_matrix):
-    print('Centrum grafu to wezel {}'.format(find_graph_center(adjacency_matrix) + 1))
-    print('Centrum minmax to wezel {}'.format(find_minmax_center(adjacency_matrix) + 1))
+    [center, dist_sum] = find_graph_center(adjacency_matrix)
+    [minmax_center, max_dist] = find_minmax_center(adjacency_matrix)
+    print('Centrum grafu to wezel {} (suma odleglosci: {})'
+          .format(center + 1, dist_sum))
+    print('Centrum minmax to wezel {} (odleglosc do najdalszego: {})'
+          .format(minmax_center + 1, max_dist))
