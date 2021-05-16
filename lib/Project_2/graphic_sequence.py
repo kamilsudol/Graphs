@@ -1,3 +1,5 @@
+from InputArguments import InputArguments
+
 from lib.Project_1.igraph_creation import create_igraph_from_adjacency_matrix
 from lib.Project_1.plot_igraph_on_circle import plot_igraph_on_circle
 from lib.Project_1.read_data import load_matrix
@@ -6,11 +8,8 @@ import numpy as np
 import numpy.lib.recfunctions as recfunctions
 
 
-def load_sequence(sequence_input=None):
-    if sequence_input is None:
-        sequence_input = input('Wprowadz ciag: ').strip().split(' ')
-    else:
-        sequence_input = sequence_input.strip().split(' ')
+def load_sequence():
+    sequence_input = input('Wprowadz ciag: ').strip().split(' ')
     return [int(i) for i in sequence_input]
 
 
@@ -36,13 +35,21 @@ def is_graphic_sequence(seq):
         seq = seq[::-1]
 
 
-def test_graphic_sequence(filename=None, seq=None, plot=None):
-    if filename is not None and seq is not None:
-        print("Wprowadzono za duzo argumentow!")
-        raise ValueError
+def test_graphic_sequence(interactive_input = True):
+    if interactive_input:
+        seq = load_sequence()
     else:
+        args = InputArguments().args
+        filename = args['filename']
+        seq = args['sequence']
+        plot = args['plots']
+
+        if filename is not None and seq is not None:
+            print("Wprowadzono za duzo argumentow!")
+            raise ValueError
+
         if filename is None:
-            seq = load_sequence(seq)
+            seq = [int(i) for i in seq.strip().split(' ')]
         else:
             seq = load_matrix(filename)[0]
 
@@ -51,7 +58,7 @@ def test_graphic_sequence(filename=None, seq=None, plot=None):
     if res is not False:
         print("Ciag jest graficzny")
         graph = create_igraph_from_adjacency_matrix(res)
-        if plot is None or plot == 'y':
+        if interactive_input or plot == 'y':
             plot_igraph_on_circle(graph)
     else:
         print("Ciag nie jest graficzny")

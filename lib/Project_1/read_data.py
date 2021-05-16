@@ -1,7 +1,8 @@
 import re
 import numpy as np
-from .MatrixRepresentation import *
 
+from InputArguments import InputArguments
+from .MatrixRepresentation import *
 
 def print_list(list):
     i = 1
@@ -31,13 +32,13 @@ def print_matrix(matrix):
 #     else:
 #         print_matrix(converted)
 
-def graph_print(matrix_representation_kind, matrix, output_format=None):
-    if output_format == None:
+def graph_print(matrix_representation_kind, matrix, interactive_input=True):
+    if interactive_input:
         matrix_representation_out = MatrixRepresentation(int(input("Wskaż format wyjściowy macierzy\n - 0 - lista "
                                                                "sąsiedztwa\n - 1 - macierz incydencji\n - 2 - macierz"
                                                                " sąsiedztwa\n> ")))
     else:
-        matrix_representation_out = resolve_representation_type_from_input(output_format)
+        matrix_representation_out = resolve_representation_type_from_input()
 
     converted = matrix_representation_kind.convert_func(matrix_representation_out)(matrix)
     if matrix_representation_out == MatrixRepresentation.List:
@@ -83,7 +84,8 @@ def resolve_matrix_type(matrix):
     print("Wrong input!")
     raise ValueError
 
-def resolve_representation_type_from_input(output_format):
+def resolve_representation_type_from_input():
+    output_format = InputArguments().args['output']
     if output_format == 'adj':
         return MatrixRepresentation.AdjacencyMatrix
     elif output_format == 'inc':
@@ -91,7 +93,7 @@ def resolve_representation_type_from_input(output_format):
     elif output_format == 'list':
         return MatrixRepresentation.List
 
-    print("Wrong input!")
+    print("Wrong input: ", output_format)
     raise ValueError
 
 def load_list(filename):
@@ -103,6 +105,12 @@ def load_list(filename):
                 matrix.append(list(map(int, filter(None, re.split(' |\n', x.split(".")[1])))))
     except IOError:
         print("Brak pliku o podanej nazwie!")
+        raise ValueError
+    except TypeError:
+        if filename is None:
+            print("Nie podano zadnego pliku")
+        else:
+            print("Typ nazwy pliku nieprawidlowy")
         raise ValueError
 
     return matrix

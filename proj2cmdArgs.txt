@@ -1,0 +1,6 @@
+"scriptArguments": "--task=1 --seq \"2 2 2 2 2\"  --shuffles=100 --output inc",
+"scriptArguments": "--task=2 --filename m_sasiedztwa.txt --shuffles=100 --output inc",
+"scriptArguments": "--task=3 --filename m_sasiedztwa.txt --plots=y --output inc",
+"scriptArguments": "--task=4 --filename m_sasiedztwa.txt --minv=100 --maxv 200 --shuffles 50",
+"scriptArguments": "--task=5 --vertices 20 -k 5",
+"scriptArguments": "--task=6 --filename full_graph6_inc.txt --plots y"

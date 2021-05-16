@@ -1,9 +1,11 @@
-from lib.Project_1.igraph_creation import create_igraph_from_adjacency_matrix
-from lib.Project_1.plot_igraph_on_circle import plot_igraph_on_circle
-
 import numpy as np
 import numpy.lib.recfunctions as recfunctions
 import random as rng
+
+from InputArguments import InputArguments
+
+from lib.Project_1.igraph_creation import create_igraph_from_adjacency_matrix
+from lib.Project_1.plot_igraph_on_circle import plot_igraph_on_circle
 
 
 def generate_index_not(index_to_avoid, adj_matrix, seq):
@@ -57,11 +59,16 @@ def generate_random_k_connected_graph(vertices, k):
     print("Ilość prób: " + str(retries + 1))
     return None
 
-def generate_and_show_random_k_connected_graph(vertices=None, k=None):
+def generate_and_show_random_k_connected_graph(interactive_input = True):
     rng.seed()
 
     while True:
-        if vertices is None or k is None: vertices, k = [int(i) for i in input("Wprowadz liczbe wierzcholkow i stopien k regularnosci\n> ").strip().split(" ")]
+        if interactive_input:
+            vertices, k = [int(i) for i in input("Wprowadz liczbe wierzcholkow i stopien k regularnosci\n> ").strip().split(" ")]
+        else:
+            args = InputArguments().args
+            vertices, k = args['vertices'], args['regularity']
+
         random_adj = generate_random_k_connected_graph(vertices, k)
 
         if random_adj is not None:

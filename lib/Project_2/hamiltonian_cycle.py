@@ -1,3 +1,5 @@
+from InputArguments import InputArguments
+
 from lib.Project_1.matrix_conversions import adjacency_matrix_to_list
 from .largest_connected_component import components
 from .retrieve_adj_matrix_from_user import retrieve_adjacency_matrix_from_user
@@ -20,11 +22,11 @@ def hamil_check_neighbours(path, adjacency_matrix, pos, n_nodes):
     return []
 
 
-def find_hamiltonian_cycle(filename=None, plot=None):
-    if filename is None:
+def find_hamiltonian_cycle(interactive_input = True):
+    if interactive_input:
         adjacency_matrix = retrieve_adjacency_matrix_from_user()
     else:
-        matrix, rep = read_matrix_from_file(filename)
+        matrix, rep = read_matrix_from_file(InputArguments().args['filename'])
         adjacency_matrix = rep.convert_func(MatrixRepresentation.AdjacencyMatrix)(matrix)
     list_matrix = adjacency_matrix_to_list(adjacency_matrix)
     if len(components(list_matrix)) != 1:
@@ -38,5 +40,5 @@ def find_hamiltonian_cycle(filename=None, plot=None):
         print('Znaleziono cykl hamiltona: ', end='')
         print(list(map(lambda i: i+1, path)))
         graph = create_igraph_from_adjacency_matrix(adjacency_matrix)
-        if plot is None or plot == 'y':
+        if interactive_input or InputArguments().args['plots'] == 'y':
             plot_igraph_on_circle(graph)

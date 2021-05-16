@@ -1,12 +1,14 @@
+import numpy as np
+import random as rnd
+
+from InputArguments import InputArguments
+
 from lib.Project_1.matrix_conversions import adjacency_matrix_to_list
 from lib.Project_1.igraph_creation import create_igraph_from_adjacency_matrix
 from lib.Project_1.plot_igraph_on_circle import plot_igraph_on_circle
 from .retrieve_adj_matrix_from_user import retrieve_adjacency_matrix_from_user
 from lib.Project_1.read_data import read_matrix_from_file
 from lib.Project_1.MatrixRepresentation import MatrixRepresentation
-
-import numpy as np
-import random as rnd
 
 
 # DFS algorithm
@@ -60,11 +62,11 @@ def create_colormap(list):
     return colormap
 
 
-def find_largest_connected_component(filename=None, plot=None):  # 3 3 2 2 2 2 2 2 2
-    if filename is None:
+def find_largest_connected_component(interactive_input = True):  # 3 3 2 2 2 2 2 2 2
+    if interactive_input:
         result = retrieve_adjacency_matrix_from_user()
     else:
-        matrix, rep = read_matrix_from_file(filename)
+        matrix, rep = read_matrix_from_file(InputArguments().args['filename'])
         result = rep.convert_func(MatrixRepresentation.AdjacencyMatrix)(matrix)
 
     graph = adjacency_matrix_to_list(result)
@@ -72,5 +74,5 @@ def find_largest_connected_component(filename=None, plot=None):  # 3 3 2 2 2 2 2
     connected_components_list = components(graph)
     largest(connected_components_list)
     colormap = create_colormap(connected_components_list)
-    if plot is None or plot == 'y':
+    if interactive_input or InputArguments().args['plots'] == 'y':
         plot_igraph_on_circle(g, colormap)

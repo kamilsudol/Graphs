@@ -1,6 +1,8 @@
 from math import floor
 import random as rng
 
+from InputArguments import InputArguments
+
 import lib.Project_1.matrix_conversions as matconv
 import lib.Project_1.random_graph as rngraph
 import lib.Project_1.igraph_creation as icreate
@@ -268,19 +270,23 @@ def find_eulerian_cycle(adj_list):
 
     return eulerian_cycle
 
-def test_eulerian_cycle(filename=None, min_vert=20, max_vert=50, num_shuffles=100, plots=None):
-    if min_vert == None: min_vert = 20
-    if max_vert == None: max_vert = 50
-    if num_shuffles == None: num_shuffles = 100
+def test_eulerian_cycle(interactive_input = True):
+    if interactive_input:
+        min_vert = 20
+        max_vert = 50
+        num_shuffles = 100
+    else:
+        args = InputArguments().args
+        min_vert = args['minv']
+        max_vert = args['maxv']
+        num_shuffles = args['shuffles']
+        filename = args['filename']
 
-    if plots == None or plots == 'y':
-        plots = True
-    elif plots == 'n':
-        plots = False
+    should_plot = interactive_input or args['plots'] == 'y'
 
     inc = []
     while len(inc) < 2:
-        if filename == None:
+        if interactive_input:
             [inc, shuffles_done, is_fully_randomized] = get_random_eulerian_graph(min_vert, max_vert, num_shuffles)
             print(f'Wykonane zamiany krawedzi: {shuffles_done}')
             while shuffles_done == 0:
@@ -304,11 +310,11 @@ def test_eulerian_cycle(filename=None, min_vert=20, max_vert=50, num_shuffles=10
             else:
                 print("Cykl Eulera: ", eulerian_cycle)
 
-            if plots:
+            if should_plot:
                 graph = icreate.create_igraph_from_incidence_matrix(inc)
                 plot.plot_igraph_on_circle(graph)
         else:
             print("Graf nie jest Eulerowski")
-            if plots:
+            if should_plot:
                 graph = icreate.create_igraph_from_incidence_matrix(inc)
                 plot.plot_igraph_on_circle(graph)
