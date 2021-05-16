@@ -12,6 +12,7 @@ from lib.Project_1.read_data import graph_print, read_matrix_from_file
 from lib.Project_2.largest_connected_component import components
 from lib.Project_2.graphic_sequence import is_graphic_sequence
 from lib.Project_2.is_duplicate_edge import is_duplicate_edge
+from lib.Project_2.find_vertices import find_vertices
 
 # Check if the incidence matrix already contains an edge
 # inc -> incidence matrix
@@ -24,7 +25,7 @@ def is_duplicate_edge(inc, v_one, v_two, checked_edge):
     for edge in range(len(inc[v_one])):
         if edge != checked_edge:
             #  Get row indexes of vertices in current edge
-            [vertex_one_temp, vertex_two_temp] = edrng.find_vertices(len(inc), inc, edge)
+            [vertex_one_temp, vertex_two_temp] = find_vertices(len(inc), inc, edge)
 
             # Check if the vertices in current edge are the same as those in checked edge
             if v_one == vertex_one_temp and v_two == vertex_two_temp:
