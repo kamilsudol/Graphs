@@ -1,15 +1,18 @@
 from math import floor
-from lib.Project_2.largest_connected_component import components
-from lib.Project_2.graphic_sequence import is_graphic_sequence
-from lib.Project_1.MatrixRepresentation import MatrixRepresentation
-from lib.Project_1.read_data import graph_print, read_matrix_from_file
+import random as rng
+
 import lib.Project_1.matrix_conversions as matconv
 import lib.Project_1.random_graph as rngraph
 import lib.Project_1.igraph_creation as icreate
 import lib.Project_1.plot_igraph_on_circle as plot
 import lib.Project_2.edge_randomizer as edrng
-import lib.Project_2.largest_connected_component as largcomp
-import random as rng
+
+from lib.Project_1.MatrixRepresentation import MatrixRepresentation
+from lib.Project_1.read_data import graph_print, read_matrix_from_file
+from lib.Project_2.largest_connected_component import components
+from lib.Project_2.graphic_sequence import is_graphic_sequence
+from lib.Project_2.is_duplicate_edge import is_duplicate_edge
+from lib.Project_2.find_vertices import find_vertices
 
 # Check if the incidence matrix already contains an edge
 # inc -> incidence matrix
@@ -22,7 +25,7 @@ def is_duplicate_edge(inc, v_one, v_two, checked_edge):
     for edge in range(len(inc[v_one])):
         if edge != checked_edge:
             #  Get row indexes of vertices in current edge
-            [vertex_one_temp, vertex_two_temp] = edrng.find_vertices(len(inc), inc, edge)
+            [vertex_one_temp, vertex_two_temp] = find_vertices(len(inc), inc, edge)
 
             # Check if the vertices in current edge are the same as those in checked edge
             if v_one == vertex_one_temp and v_two == vertex_two_temp:
@@ -179,7 +182,7 @@ def get_random_eulerian_candidate(min_vert, max_vert, min_edges, max_edges):
 # Returns largest component as adjacency list
 def get_candidates_largest_component(adj_list):
     # Parse graph into connected components and find the largest one 
-    components_list = largcomp.components(adj_list)
+    components_list = components(adj_list)
     largest_iterator = get_largest_component_iterator(components_list)
     largest_component = components_list[largest_iterator]
 
