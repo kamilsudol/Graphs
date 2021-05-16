@@ -1,13 +1,14 @@
-from lib.Project_2.eulerian_cycle import is_duplicate_edge
 import random as rng
 
 from lib.Project_1.matrix_conversions import adjacency_matrix_to_incidence_matrix
 from lib.Project_1.igraph_creation import create_igraph_from_incidence_matrix
 from lib.Project_1.plot_igraph_on_circle import plot_igraph_on_circle
 from lib.Project_1.read_data import print_matrix, print_list, read_matrix_from_file, graph_print
-from .retrieve_adj_matrix_from_user import retrieve_adjacency_matrix_from_user
-
 from lib.Project_1.MatrixRepresentation import MatrixRepresentation
+from lib.Project_2.retrieve_adj_matrix_from_user import retrieve_adjacency_matrix_from_user
+from lib.Project_2.is_duplicate_edge import is_duplicate_edge
+
+
 
 # Pick two random edges from incidence matrix
 # inc -> graph as incidence matrix
