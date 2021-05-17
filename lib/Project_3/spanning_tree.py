@@ -1,12 +1,17 @@
+from operator import attrgetter
+
 from lib.Project_3.weighted_graph import plot_weighted_graph_on_circle
-from lib.Project_2.largest_connected_component import components
-from lib.Project_1.matrix_conversions import adjacency_matrix_to_list
 
 
-def intersection(list1, list2):
-    return [v for v in list1 if v in list2]
+class Edge:
+    def __init__(self, vertex_a, vertex_b, weight):
+        self.start = vertex_a
+        self.end = vertex_b
+        self.weight = weight
 
 
+# returns adjacency matrix of resulting spanning tree.
+# returns empty list if finding neighbours fails (graph is not connected).
 def prim_generate_minimum_spanning_tree(adjacency_matrix):
     size = len(adjacency_matrix)
     res = [[0] * size for _ in range(size)]
@@ -15,23 +20,23 @@ def prim_generate_minimum_spanning_tree(adjacency_matrix):
     free_vertices = [i for i in range(1, size)]
 
     while len(ready_vertices) < size:
-        current_row = [int(v) for v in adjacency_matrix[ready_vertices[-1]]]
-        neighbours = [i for i, v in enumerate(current_row) if v != 0]
-        available_neighbours = intersection(neighbours, free_vertices)
-        min_index = current_row.index(min([current_row[i] for i in available_neighbours]))
+        edges = []
+        for v in ready_vertices:
+            edges += [Edge(v, j, adjacency_matrix[v][j]) for j in range(size) if adjacency_matrix[v][j]]
+        available_edges = [e for e in edges if e.end not in ready_vertices]
+        if not available_edges:
+            return []
+        min_edge = min(available_edges, key=attrgetter('weight'))
 
-        res[ready_vertices[-1]][min_index] = current_row[min_index]
-        res[min_index][ready_vertices[-1]] = current_row[min_index]
-        ready_vertices.append(min_index)
-        free_vertices.remove(min_index)
+        res[min_edge.start][min_edge.end] = res[min_edge.end][min_edge.start] = min_edge.weight
+        ready_vertices.append(min_edge.end)
+        free_vertices.remove(min_edge.end)
 
     return res
 
 
 def draw_minimum_spanning_tree(adjacency_matrix):
-    adjacency_list = adjacency_matrix_to_list(adjacency_matrix)
-    if len(components(adjacency_list)) > 1:
-        print('Blad genracji minimalnego drzewa rozpinajacego: graf nie jest spojny')
-        return []
     res_adj_mat = prim_generate_minimum_spanning_tree(adjacency_matrix)
+    if not res_adj_mat:
+        print('Blad generacji minimalnego drzewa rozpinajacego: graf nie jest spojny.')
     plot_weighted_graph_on_circle(res_adj_mat)
