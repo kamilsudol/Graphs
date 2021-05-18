@@ -3,7 +3,7 @@ import random as rnd
 from lib.Project_1.matrix_conversions import adjacency_matrix_to_list
 from .plot_digraph_on_circle import plot_digraph_on_circle
 from .DiMatrixRepresentation import DiMatrixRepresentation
-from .random_digraph import random_graph_probability
+from .random_digraph import generate_random_digraph
 
 
 def get_random_w(list):
@@ -48,18 +48,11 @@ def get_proper_random_weights(list_random_graph):
 
 
 def bellman_ford_start():
-    num_vertices, probability = input(
-        "Podaj liczbe wierzcholkow grafu i prawdopodbienstwo istnienia krawedzi\n> ").split()
-    num_vertices = int(num_vertices)
-    probability = float(probability)
+    random_graph_adj = generate_random_digraph()
 
-    random_graph_adj = random_graph_probability(num_vertices, probability)
-
-    vert_start = int(input("Podaj numer wierzchołka:"))
-
-    if vert_start - 1 > len(random_graph_adj):
-        print("Błędne dane!")
-        raise ValueError
+    vert_start = int(input("Podaj numer wierzchołka: "))
+    if not 1 <= vert_start <= len(random_graph_adj):
+        raise ValueError("Taki wierzcholek nie istnieje")
 
     list_random_graph = adjacency_matrix_to_list(random_graph_adj)
     random_weights = get_proper_random_weights(list_random_graph)
@@ -69,4 +62,4 @@ def bellman_ford_start():
     random_graph_plot = DiMatrixRepresentation.AdjacencyMatrix.to_digraph_func()(random_graph_adj)
     plot_digraph_on_circle(random_graph_plot, weights=[random_graph_adj, random_weights])
 
-    print("Wagi scieżek od wierzchołka {}:".format(vert_start) + str(ds))
+    print("Wagi scieżek od wierzchołka {}: ".format(vert_start) + str(ds))

@@ -3,6 +3,7 @@ from lib.Project_4.digraph_creation import create_digraph_from_adjacency_matrix
 from lib.Project_4.plot_digraph_on_circle import plot_digraph_on_circle
 import lib.Project_4.random_digraph as rngdi
 import lib.Project_2.largest_connected_component as lcc
+from lib.Utils.decorators import retry_on_value_error
 
 import numpy as np
 
@@ -70,21 +71,12 @@ def get_components_vertices(components):
     
     return components_vertex_list
 
-def test_strongly_connected(filename=None, num_vertices=None, probability=None):
-    if num_vertices == None: num_vertices = int(input("Podaj liczbe wierzchołkow grafu: "))
-    if probability == None: probability = float(input("Podaj prawdopodobienstwo istnienia krawedzi: "))
-
-    # get random digraph
-    if filename == None:
-        print("Generuje graf...")
-        adj = rngdi.random_graph_probability(num_vertices, probability)
-    else:
-        adj = load_matrix(filename)
+def test_strongly_connected():
+    adj = rngdi.generate_random_digraph()
 
     #find components with Kosaraju
     print("Szukam składowych...")
     components = kosaraju(adj)
-    # print(components)
 
     print("Wynik:")
     components_vertex_list = get_components_vertices(components)

@@ -5,7 +5,8 @@ from lib.Project_3.dijkstras import dijkstra_find_shortest_paths
 from .plot_digraph_on_circle import plot_digraph_on_circle
 from .DiMatrixRepresentation import DiMatrixRepresentation
 from lib.Project_1.matrix_conversions import adjacency_matrix_to_list
-from .random_digraph import random_graph_probability
+from lib.Project_1.read_data import print_list
+from .random_digraph import generate_random_digraph
 
 
 def add_s(G, w):
@@ -41,23 +42,8 @@ def johnson(G, w):
     return D
 
 
-def print_path_matrix(paths):
-    print("Macierz kosztów dojścia:")
-    it = 1
-    for row in paths:
-        string_row = "{}. ".format(it)
-        for el in row:
-            string_row += str(el) + " "
-        print(string_row)
-        it += 1
-
-
 def paths_between_nodes():
-    num_vertices, probability = input(
-        "Podaj liczbe wierzcholkow grafu i prawdopodbienstwo istnienia krawedzi\n> ").split()
-    num_vertices = int(num_vertices)
-    probability = float(probability)
-    random_graph_adj = random_graph_probability(num_vertices, probability)
+    random_graph_adj = generate_random_digraph()
     list_random_graph = adjacency_matrix_to_list(random_graph_adj)
     random_weights = get_proper_random_weights(list_random_graph)
 
@@ -65,4 +51,5 @@ def paths_between_nodes():
     plot_digraph_on_circle(random_graph_plot, weights=[random_graph_adj, random_weights])
 
     D = johnson(random_graph_adj, random_weights)
-    print_path_matrix(D)
+    
+    print_list(D)

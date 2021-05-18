@@ -16,7 +16,7 @@ def get_exercise_index():
         " - 5 - zakoncz\n> ").strip()) - 1
 
     if index < 0 or index > 4:
-        raise ValueError 
+        raise ValueError("Nie ma takiego zadania")
 
     return index
 
