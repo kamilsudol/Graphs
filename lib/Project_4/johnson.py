@@ -9,6 +9,17 @@ from lib.Project_1.read_data import print_list, read_digraph_from_file
 from .random_digraph import generate_random_digraph
 
 
+def print_weights_table(d_matrix):
+    print("Macierz kosztów dojścia:")
+    header = ["{}.".format(x+1) for x in range(len(d_matrix))]
+    data = np.array(d_matrix, dtype=int)
+
+    row_format = "{:>4}" * (len(header)+1)
+    print(row_format.format("", *header))
+    for team, row in zip(header, data):
+        print(row_format.format(team, *row))
+
+
 def add_s(G, w):
     n = len(G) + 1
     G_prim = np.zeros([n, n], dtype=int)
@@ -53,8 +64,8 @@ def paths_between_nodes(arg_singleton):
     random_weights = get_proper_random_weights(list_random_graph)
 
     D = johnson(random_graph_adj, random_weights)
-    
-    print_list(D)
+
+    print_weights_table(D)
 
     if args['plots'] != 'n':
         random_graph_plot = DiMatrixRepresentation.AdjacencyMatrix.to_digraph_func()(random_graph_adj)
