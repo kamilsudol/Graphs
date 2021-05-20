@@ -1,9 +1,11 @@
+from lib.Project_1.MatrixRepresentation import MatrixRepresentation
 import random
 
 import numpy as np
 
 from lib.Project_1.matrix_conversions import adjacency_matrix_to_list
 from lib.Project_1.random_graph import random_graph_edges, random_graph_probability
+from lib.Project_1.read_data import read_matrix_from_file
 from lib.Utils.decorators import retry_on_value_error
 from lib.Project_2.largest_connected_component import components
 
@@ -63,8 +65,15 @@ def assign_weights_to_graph(adjacency_matrix, min_weight, max_weight):
 
 # returns resulting adjacency matrix
 # if graph is not connected will automatically extract largest connected component
-def generate_random_weighted_graph_adjacency():
-    adjacency_matrix_initial = retrieve_random_graph_from_user()
+def generate_random_weighted_graph_adjacency(arg_singleton):
+    args = arg_singleton.get_instance().arguments
+    if args['filename'] is None:
+        adjacency_matrix_initial = retrieve_random_graph_from_user()
+    else:
+        [adjacency_matrix_initial, representation] = read_matrix_from_file(args['filename'])
+        if representation != MatrixRepresentation.AdjacencyMatrix:
+            raise ValueError("Program oczekuje macierzy sasiedztwa")
+            
     largest_connected = np.array(retrieve_largest_component(adjacency_matrix_initial))
     if largest_connected.size == 1:  # discard empty graph
         return None

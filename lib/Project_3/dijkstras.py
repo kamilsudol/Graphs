@@ -29,7 +29,8 @@ def dijkstra_find_shortest_paths(adjacency_matrix, starting_vertex=0):
     return distance, previous
 
 
-def dijkstra_find_and_print_shortest_paths(adjacency_matrix, starting_vertex=0):
+def dijkstra_find_and_print_shortest_paths(adjacency_matrix, arg_singleton, starting_vertex=0):
+    args = arg_singleton.get_instance().arguments
     (distance, previous) = dijkstra_find_shortest_paths(adjacency_matrix, starting_vertex)
     print('START: s = {}'.format(starting_vertex + 1))
     for i in range(len(distance)):
@@ -51,7 +52,8 @@ def get_shortest_paths_table(adjacency_matrix):
     return res
 
 
-def print_shortest_paths_table(adjacency_matrix):
+def print_shortest_paths_table(adjacency_matrix, arg_singleton):
+    args = arg_singleton.get_instance().arguments
     distances = get_shortest_paths_table(adjacency_matrix)
     for row in distances:
         for d in row:
@@ -73,7 +75,8 @@ def find_minmax_center(adjacency_matrix):
     return [maxes.index(min_val), min_val]
 
 
-def print_graph_centers(adjacency_matrix):
+def print_graph_centers(adjacency_matrix, arg_singleton):
+    args = arg_singleton.get_instance().arguments
     [center, dist_sum] = find_graph_center(adjacency_matrix)
     [minmax_center, max_dist] = find_minmax_center(adjacency_matrix)
     print('Centrum grafu to wezel {} (suma odleglosci: {})'

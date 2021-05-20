@@ -35,8 +35,11 @@ def prim_generate_minimum_spanning_tree(adjacency_matrix):
     return res
 
 
-def draw_minimum_spanning_tree(adjacency_matrix):
+def draw_minimum_spanning_tree(adjacency_matrix, arg_singleton):
+    args = arg_singleton.get_instance().arguments
     res_adj_mat = prim_generate_minimum_spanning_tree(adjacency_matrix)
     if not res_adj_mat:
         print('Blad generacji minimalnego drzewa rozpinajacego: graf nie jest spojny.')
-    plot_weighted_graph_on_circle(res_adj_mat)
+    
+    if args['plots'] != 'n':
+        plot_weighted_graph_on_circle(res_adj_mat)
