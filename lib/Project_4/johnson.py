@@ -5,7 +5,7 @@ from lib.Project_3.dijkstras import dijkstra_find_shortest_paths
 from .plot_digraph_on_circle import plot_digraph_on_circle
 from .DiMatrixRepresentation import DiMatrixRepresentation
 from lib.Project_1.matrix_conversions import adjacency_matrix_to_list
-from lib.Project_1.read_data import print_list
+from lib.Project_1.read_data import print_list, read_digraph_from_file
 from .random_digraph import generate_random_digraph
 
 
@@ -42,14 +42,20 @@ def johnson(G, w):
     return D
 
 
-def paths_between_nodes():
-    random_graph_adj = generate_random_digraph()
+def paths_between_nodes(arg_singleton):
+    args = arg_singleton.get_instance().arguments
+    if args['filename'] is None:
+        random_graph_adj = generate_random_digraph()
+    else:
+        [random_graph_adj, _] = read_digraph_from_file(args['filename'])
+
     list_random_graph = adjacency_matrix_to_list(random_graph_adj)
     random_weights = get_proper_random_weights(list_random_graph)
-
-    random_graph_plot = DiMatrixRepresentation.AdjacencyMatrix.to_digraph_func()(random_graph_adj)
-    plot_digraph_on_circle(random_graph_plot, weights=[random_graph_adj, random_weights])
 
     D = johnson(random_graph_adj, random_weights)
     
     print_list(D)
+
+    if args['plots'] != 'n':
+        random_graph_plot = DiMatrixRepresentation.AdjacencyMatrix.to_digraph_func()(random_graph_adj)
+        plot_digraph_on_circle(random_graph_plot, weights=[random_graph_adj, random_weights])

@@ -1,4 +1,5 @@
-from lib.Project_1.read_data import load_matrix
+from Arguments import ArgumentsSingleton
+from lib.Project_1.read_data import read_digraph_from_file
 from lib.Project_4.digraph_creation import create_digraph_from_adjacency_matrix
 from lib.Project_4.plot_digraph_on_circle import plot_digraph_on_circle
 import lib.Project_4.random_digraph as rngdi
@@ -71,10 +72,13 @@ def get_components_vertices(components):
     
     return components_vertex_list
 
-def test_strongly_connected():
-    adj = rngdi.generate_random_digraph()
+def test_strongly_connected(arg_singleton):
+    args = arg_singleton.get_instance().arguments
+    if args['filename'] is None:
+        adj = rngdi.generate_random_digraph()
+    else:
+        [adj, _] = read_digraph_from_file(args['filename'])
 
-    #find components with Kosaraju
     print("Szukam składowych...")
     components = kosaraju(adj)
 
@@ -83,5 +87,6 @@ def test_strongly_connected():
     for l in components_vertex_list:
         print(l)
 
-    colormap = lcc.create_colormap(components_vertex_list)
-    plot_digraph_on_circle(create_digraph_from_adjacency_matrix(adj), colormap)
+    if args['plots'] != 'n':
+        colormap = lcc.create_colormap(components_vertex_list)
+        plot_digraph_on_circle(create_digraph_from_adjacency_matrix(adj), colormap)

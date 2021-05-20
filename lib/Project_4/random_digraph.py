@@ -38,9 +38,11 @@ def generate_random_digraph():
     return random_graph_probability(num_vertices, probability)
 
 
-def digraph_randomizer_start():
+def digraph_randomizer_start(arg_singleton):
+    args = arg_singleton.get_instance().arguments
     random_graph_adj = generate_random_digraph()
     print_matrix(random_graph_adj)
 
-    random_graph = DiMatrixRepresentation.AdjacencyMatrix.to_digraph_func()(random_graph_adj)
-    plot_digraph_on_circle(random_graph)
+    if args['plots'] != 'n':
+        random_graph = DiMatrixRepresentation.AdjacencyMatrix.to_digraph_func()(random_graph_adj)
+        plot_digraph_on_circle(random_graph)

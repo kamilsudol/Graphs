@@ -1,6 +1,7 @@
 import re
 import numpy as np
 from .MatrixRepresentation import *
+from lib.Project_4.DiMatrixRepresentation import DiMatrixRepresentation
 
 
 def print_list(list):
@@ -54,6 +55,11 @@ def check_adjacency(matrix):
             return False
     return True
 
+def check_digraph_adjacency(matrix):
+    for i in range(len(matrix)):
+        if int(matrix[i][i]) != 0:
+            return False
+    return True
 
 def check_columns(matrix):
     tmp_matrix = np.array(matrix, dtype=int).transpose()
@@ -128,3 +134,10 @@ def read_matrix_from_file(name):  # funkcja zwraca liste zawierajaca macierz wra
     except IndexError:
         m = load_matrix(name)
         return [m, resolve_matrix_type(m)]
+
+def read_digraph_from_file(name):  # funkcja zwraca liste zawierajaca macierz wraz z jej typem
+    m = load_matrix(name)
+    if not check_digraph_adjacency(m):
+        raise ValueError("Not an adjacency matrix")
+
+    return [m, DiMatrixRepresentation.AdjacencyMatrix]
