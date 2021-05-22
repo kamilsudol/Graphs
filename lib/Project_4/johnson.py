@@ -12,9 +12,9 @@ from .random_digraph import generate_random_digraph
 def print_weights_table(d_matrix):
     print("Macierz kosztów dojścia:")
     header = ["{}.".format(x+1) for x in range(len(d_matrix))]
-    data = np.array(d_matrix, dtype=int)
+    data = np.array(d_matrix, dtype=str)
 
-    row_format = "{:>4}" * (len(header)+1)
+    row_format = "{:>5}" * (len(header)+1)
     print(row_format.format("", *header))
     for team, row in zip(header, data):
         print(row_format.format(team, *row))
