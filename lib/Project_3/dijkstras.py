@@ -7,7 +7,7 @@ def relax(u, v, distance, previous, adjacency_matrix):
         previous[v] = u
 
 
-def dijkstra_find_shortest_paths(adjacency_matrix, starting_vertex=0):
+def dijkstra_find_shortest_paths(adjacency_matrix, starting_vertex=0, adjacency_matrix_original=None):
     n_vertices = len(adjacency_matrix[0])
     previous = [-1] * n_vertices
     distance = [math.inf] * n_vertices
@@ -22,7 +22,10 @@ def dijkstra_find_shortest_paths(adjacency_matrix, starting_vertex=0):
                 u = i
 
         ready_vertices.append(u)
-        not_calculated_u_neighbours = [i for i in not_calculated_v if adjacency_matrix[u][i]]
+        if adjacency_matrix_original is None:
+            not_calculated_u_neighbours = [i for i in not_calculated_v if adjacency_matrix[u][i]]
+        else:
+            not_calculated_u_neighbours = [i for i in not_calculated_v if adjacency_matrix_original[u][i]]
         for v in not_calculated_u_neighbours:
             relax(u, v, distance, previous, adjacency_matrix)
 

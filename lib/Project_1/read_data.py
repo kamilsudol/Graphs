@@ -22,16 +22,6 @@ def print_matrix(matrix):
         print(string)
 
 
-# def graph_print(matrix_representation_kind, matrix):
-#     matrix_representation_out = MatrixRepresentation(int(input("Wskaż format wyjściowy macierzy\n - 0 - lista "
-#                                                                "sąsiedztwa\n - 1 - macierz incydencji\n - 2 - macierz"
-#                                                                " sąsiedztwa\n> ")))
-#     converted = matrix_representation_kind.convert_func(matrix_representation_out)(matrix)
-#     if matrix_representation_out == MatrixRepresentation.List:
-#         print_list(converted)
-#     else:
-#         print_matrix(converted)
-
 def graph_print(matrix_representation_kind, matrix, output_format=None):
     if output_format == None:
         matrix_representation_out = MatrixRepresentation(int(input("Wskaż format wyjściowy macierzy\n - 0 - lista "

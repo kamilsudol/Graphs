@@ -4,8 +4,8 @@ from lib.Project_4.bellman_ford import bellman_ford, get_proper_random_weights
 from lib.Project_3.dijkstras import dijkstra_find_shortest_paths
 from .plot_digraph_on_circle import plot_digraph_on_circle
 from .DiMatrixRepresentation import DiMatrixRepresentation
-from lib.Project_1.matrix_conversions import adjacency_matrix_to_list
-from lib.Project_1.read_data import print_list, read_digraph_from_file
+from lib.Project_1.matrix_conversions import adjacency_matrix_to_list, list_to_adjacency_matrix
+from lib.Project_1.read_data import read_digraph_from_file
 from .random_digraph import generate_random_digraph
 
 
@@ -44,7 +44,7 @@ def johnson(G, w):
             w_prim[v][u-1] = w[v][u-1] + h[v] - h[u-1]
     D = np.zeros([n - 1, n - 1], dtype=float)
     for u in range(len(G)):
-        du_prim, pu_prim = dijkstra_find_shortest_paths(w_prim, u)
+        du_prim, pu_prim = dijkstra_find_shortest_paths(adjacency_matrix=w_prim, starting_vertex=u, adjacency_matrix_original=list_to_adjacency_matrix(G_prim))
         for v in range(len(G)):
             try:
                 D[u][v] = du_prim[v] - h[u] + h[v]

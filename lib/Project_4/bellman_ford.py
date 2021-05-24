@@ -12,8 +12,8 @@ def get_random_w(list):
     random_w = np.zeros([n, n], dtype=int)
     for u in range(n):
         for v in list[u]:
-            # random_w[u][v - 1] = rnd.randint(-5, 10)
-            random_w[u][v - 1] = rnd.randint(-1, 10)
+            random_w[u][v - 1] = rnd.randint(-5, 10)
+            # random_w[u][v - 1] = rnd.randint(-1, 10)
 
     return random_w
 
