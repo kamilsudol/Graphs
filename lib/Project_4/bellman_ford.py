@@ -55,17 +55,17 @@ def bellman_ford_start(arg_singleton):
     else:
         [random_graph_adj, _] = read_digraph_from_file(args['filename'])
 
+    list_random_graph = adjacency_matrix_to_list(random_graph_adj)
+    random_weights = get_proper_random_weights(list_random_graph)
+
+    if args['plots'] != 'n':
+        random_graph_plot = DiMatrixRepresentation.AdjacencyMatrix.to_digraph_func()(random_graph_adj)
+        plot_digraph_on_circle(random_graph_plot, weights=[random_graph_adj, random_weights])
+
     vert_start = int(input("Podaj numer wierzchołka: "))
     if not 1 <= vert_start <= len(random_graph_adj):
         raise ValueError("Taki wierzcholek nie istnieje")
 
-    list_random_graph = adjacency_matrix_to_list(random_graph_adj)
-    random_weights = get_proper_random_weights(list_random_graph)
-
     state, ds = bellman_ford(list_random_graph, random_weights, vert_start)
 
     print("Wagi scieżek od wierzchołka {}: ".format(vert_start) + str(ds))
-    
-    if args['plots'] != 'n':
-        random_graph_plot = DiMatrixRepresentation.AdjacencyMatrix.to_digraph_func()(random_graph_adj)
-        plot_digraph_on_circle(random_graph_plot, weights=[random_graph_adj, random_weights])

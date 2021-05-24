@@ -111,6 +111,8 @@ def load_matrix(filename):
         with open(filename, 'r') as file:
             for x in file:
                 matrix.append(list(map(int, filter(None, re.split('\n| ', x)))))
+    except ValueError:
+        raise ValueError("Adjacency list is not supported in this context")
     except IOError:
         print("Brak pliku o podanej nazwie!")
         raise ValueError
@@ -124,10 +126,11 @@ def read_matrix_from_file(name):  # funkcja zwraca liste zawierajaca macierz wra
     except IndexError:
         m = load_matrix(name)
         return [m, resolve_matrix_type(m)]
+    
 
-def read_digraph_from_file(name):  # funkcja zwraca liste zawierajaca macierz wraz z jej typem
+def read_digraph_from_file(name):
     m = load_matrix(name)
     if not check_digraph_adjacency(m):
-        raise ValueError("Not an adjacency matrix")
+        raise ValueError("Incidence matrix is not supported in this context")
 
     return [m, DiMatrixRepresentation.AdjacencyMatrix]
