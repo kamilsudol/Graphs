@@ -35,6 +35,7 @@ ZADANIE 1 - generowanie spojnego grafu losowego z krawedziami o losowych wagach:
 		opcjonalnie można wprowadzić graf w postaci macierzy sasiedztwa za pomocą flagi wywołania konsolowego
 	wyjście:
 		graficzna reprezentacja wygenerowanego grafu.
+        jeśli wygenerowany graf nie jest spójny, wynikiem będzie jego największa spójna składowa
 	W PRZYPADKU WYWOŁANIA Z APLIKACJI:
 		wygenerowany graf losowy z wagami jest wykorzystywany w wywołaniach kolejnych zadań
 
