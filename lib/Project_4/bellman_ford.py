@@ -62,7 +62,11 @@ def bellman_ford_start(arg_singleton):
         random_graph_plot = DiMatrixRepresentation.AdjacencyMatrix.to_digraph_func()(random_graph_adj)
         plot_digraph_on_circle(random_graph_plot, weights=[random_graph_adj, random_weights])
 
-    vert_start = int(input("Podaj numer wierzchołka: "))
+    vert_start = args['vertices']
+
+    if vert_start is None:
+        vert_start = int(input("Podaj numer wierzchołka: "))
+
     if not 1 <= vert_start <= len(random_graph_adj):
         raise ValueError("Taki wierzcholek nie istnieje")
 
