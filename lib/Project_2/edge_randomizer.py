@@ -54,7 +54,7 @@ def swap_between_columns(row, col1, col2, matrix):
 # inc -> the modified incidence matrix
 # shuffles_done -> number of executed edge swaps
 # is_fully_randomized -> True/False: has it performed the given amount of swaps
-def randomize_edges(adj, num_shuffles, guard_limit=200, plots=False):
+def randomize_edges(adj, num_shuffles, guard_limit=100, plots=False):
 
     inc = adjacency_matrix_to_incidence_matrix(adj)
     if plots:
@@ -86,6 +86,7 @@ def randomize_edges(adj, num_shuffles, guard_limit=200, plots=False):
             swap_between_columns(edge_one_vertices[0], edge_one_col, edge_two_col, inc)
             swap_between_columns(edge_two_vertices[0], edge_one_col, edge_two_col, inc)
             shuffles_done += 1
+            guard = 0
 
     return [inc, shuffles_done, True]
 
@@ -113,6 +114,10 @@ def test_randomization(filename=None, output_format=None, num_shuffles=None, plo
     if plots: plot_igraph_on_circle(graph)
 
     [randomized_incidence, shuffles_done, is_fully_randomized] = randomize_edges(adj, num_shuffles, False)
+
+    if not is_fully_randomized:
+        print(f"Randomizacja {num_shuffles} razy nieprzeprowadzona pomyślnie, graf zbyt gęsty lub pełny")
+
     print(f"Po randomizacji {shuffles_done} razy:")
     graph_print(representation, randomized_incidence, output_format)
     graph = create_igraph_from_incidence_matrix(randomized_incidence)

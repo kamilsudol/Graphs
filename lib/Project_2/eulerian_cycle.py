@@ -14,41 +14,6 @@ from lib.Project_2.graphic_sequence import is_graphic_sequence
 from lib.Project_2.is_duplicate_edge import is_duplicate_edge
 from lib.Project_2.find_vertices import find_vertices
 
-# Check if the incidence matrix already contains an edge
-# inc -> incidence matrix
-# v_one -> row index of vertex one in checked edge
-# v_two -> row index of vertex two in checked edge
-# checked_edge -> column index of the checked edge
-# Returns True if there is a duplicate, False otherwise
-def is_duplicate_edge(inc, v_one, v_two, checked_edge):
-    # Get row indexes of vertices in checked edge
-    for edge in range(len(inc[v_one])):
-        if edge != checked_edge:
-            #  Get row indexes of vertices in current edge
-            [vertex_one_temp, vertex_two_temp] = find_vertices(len(inc), inc, edge)
-
-            # Check if the vertices in current edge are the same as those in checked edge
-            if v_one == vertex_one_temp and v_two == vertex_two_temp:
-                return True
-    return False
-
-# Get graphic sequence from incidence matrix
-# inc -> incidence matrix
-# num_vertices -> number of vertices in the incidence matrix(number of rows)
-# Returns graphic sequence as list
-def calculate_graphic_seq_from_incidence(inc, num_vertices):
-    graphic_seq = []
-    vertex_degree = 0
-
-    for row in range(num_vertices):
-        # Calculate the degree of a single vertex by adding all edges that it belongs to
-        for vertex in inc[row]:
-            vertex_degree += vertex
-        graphic_seq.append(vertex_degree)
-        vertex_degree = 0
-    
-    return graphic_seq
-
 #DEPRECATED
 # Rewire edge by changing to which vertices it connects
 # inc -> incidence matrix
@@ -86,17 +51,6 @@ def rewire_edge(inc, v_one, v_two):
                 break
 
     return inc
-
-# Checks if graphic sequence meets the condition of containing only vertices with even degrees
-# graphic_seq -> graphic sequence to be evaluated
-# Returns True if condition met and False otherwise
-def is_eulerian(graphic_seq):
-    eulerian = True
-    for vertex_degree in graphic_seq:
-        if vertex_degree%2 != 0:
-            eulerian = False
-
-    return eulerian
 
 #DEPRECATED
 # Relabels vertices of a graph component to make it a standalone graph
@@ -195,6 +149,53 @@ def get_candidates_largest_component(adj_list):
 
     return component_to_graph(largest_adj_list, largest_component_vertex_indexes)
 
+# Check if the incidence matrix already contains an edge
+# inc -> incidence matrix
+# v_one -> row index of vertex one in checked edge
+# v_two -> row index of vertex two in checked edge
+# checked_edge -> column index of the checked edge
+# Returns True if there is a duplicate, False otherwise
+def is_duplicate_edge(inc, v_one, v_two, checked_edge):
+    # Get row indexes of vertices in checked edge
+    for edge in range(len(inc[v_one])):
+        if edge != checked_edge:
+            #  Get row indexes of vertices in current edge
+            [vertex_one_temp, vertex_two_temp] = find_vertices(len(inc), inc, edge)
+
+            # Check if the vertices in current edge are the same as those in checked edge
+            if v_one == vertex_one_temp and v_two == vertex_two_temp:
+                return True
+    return False
+
+# Get graphic sequence from incidence matrix
+# inc -> incidence matrix
+# num_vertices -> number of vertices in the incidence matrix(number of rows)
+# Returns graphic sequence as list
+def calculate_graphic_seq_from_incidence(inc, num_vertices):
+    graphic_seq = []
+    vertex_degree = 0
+
+    for row in range(num_vertices):
+        # Calculate the degree of a single vertex by adding all edges that it belongs to
+        for vertex in inc[row]:
+            vertex_degree += vertex
+        graphic_seq.append(vertex_degree)
+        vertex_degree = 0
+    
+    return graphic_seq
+
+# Checks if graphic sequence meets the condition of containing only vertices with even degrees
+# graphic_seq -> graphic sequence to be evaluated
+# Returns True if condition met and False otherwise
+def is_eulerian(graphic_seq):
+    eulerian = True
+    for vertex_degree in graphic_seq:
+        if vertex_degree%2 != 0:
+            eulerian = False
+
+    return eulerian
+
+
 # Generates a eulerian graph
 # Graph has vertices in range of [min_vert, max_vert]
 # Graph is randomized through edge swaps up to 'num_shuffles' times
@@ -212,7 +213,7 @@ def get_random_eulerian_graph(min_vert, max_vert, num_shuffles):
         graph_seq = []
 
         for _ in range(num_vertices):
-            val = rng.randint(1, floor(num_vertices/2) - 1) * 2
+            val = rng.randint(1, floor(num_vertices/2)) * 2
             graph_seq.append(val)
 
         adj = is_graphic_sequence(graph_seq)
@@ -241,7 +242,7 @@ def remove_edge(adj_list, v_one, other_vertex_idx):
 # Finds the eulerian cycle in a eulerian graph
 # using Hierholzer's algorithm
 # adj_list -> eulerian graph as adjacency list
-# Returns an array containing the cycle  
+# Returns a list containing the cycle  
 def find_eulerian_cycle(adj_list):
     temp_list = adj_list
 
@@ -268,19 +269,28 @@ def find_eulerian_cycle(adj_list):
 
     return eulerian_cycle
 
-def test_eulerian_cycle(filename=None, min_vert=20, max_vert=50, num_shuffles=100, plots=None):
-    if min_vert == None: min_vert = 20
-    if max_vert == None: max_vert = 50
-    if num_shuffles == None: num_shuffles = 100
+def test_eulerian_cycle(filename=None, min_vert=None, max_vert=None, num_shuffles=None, plots=None):
+    if filename is None:
+        if min_vert is None: min_vert = int(input("Podaj minimalną liczbę wierzchołków grafu (większą niż 3)\n> "))
+        if min_vert < 4: 
+            print("Minimalna liczba wierzchołków musi by większa niż 3!") 
+            return
 
-    if plots == None or plots == 'y':
+        if max_vert is None: max_vert = int(input("Podaj maksymalną liczbę wierzchołków grafu (większą niż 3)\n> "))
+        if max_vert < 4: 
+            print("Maksymalna liczba wierzchołków musi by większa niż 3!") 
+            return
+
+        if num_shuffles is None: num_shuffles = int(input("Podaj oczekiwaną liczbę randomizacji\n> "))
+
+    if plots is None or plots == 'y':
         plots = True
     elif plots == 'n':
         plots = False
 
     inc = []
     while len(inc) < 2:
-        if filename == None:
+        if filename is None:
             [inc, shuffles_done, is_fully_randomized] = get_random_eulerian_graph(min_vert, max_vert, num_shuffles)
             print(f'Wykonane zamiany krawedzi: {shuffles_done}')
             while shuffles_done == 0:

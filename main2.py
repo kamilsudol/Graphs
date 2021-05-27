@@ -47,7 +47,7 @@ if __name__ == '__main__':
         print("Invalid task")
 
     exercises = [test_graphic_sequence, test_randomization, find_largest_connected_component, test_eulerian_cycle,
-                 generate_and_show_random_k_connected_graph, find_hamiltonian_cycle]
+                 generate_and_show_random_k_connected_graph, find_hamiltonian_cycle, close]
 
     while not run_from_cl:
         try:
