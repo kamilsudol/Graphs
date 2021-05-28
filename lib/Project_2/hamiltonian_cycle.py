@@ -8,15 +8,19 @@ from lib.Project_1.MatrixRepresentation import MatrixRepresentation
 
 
 def hamil_check_neighbours(path, adjacency_matrix, pos, n_nodes):
-    current_neighbours = [i for i in range(n_nodes) if adjacency_matrix[pos][i]]
-    if pos == n_nodes - 1 and path[0] in current_neighbours:
-        return path
+    current_neighbours = [i for i in range(n_nodes) if adjacency_matrix[path[pos]][i]]
+    if pos == n_nodes - 1:
+        if path[0] in current_neighbours:
+            return path
+        else:
+            return []
 
     for k in current_neighbours:
         if k not in path:
             path[pos + 1] = k
             if hamil_check_neighbours(path, adjacency_matrix, pos + 1, n_nodes):
                 return path
+    path[pos + 1] = 0
     return []
 
 
@@ -31,6 +35,7 @@ def find_hamiltonian_cycle(filename=None, plot=None):
         print('Graf nie jest hamiltonowski.')
         return
     n_nodes = len(adjacency_matrix)
+    print(adjacency_matrix)
     path = hamil_check_neighbours([0 for _ in range(n_nodes)], adjacency_matrix, 0, n_nodes)
     if not path:
         print('Graf nie jest hamiltonowski.')

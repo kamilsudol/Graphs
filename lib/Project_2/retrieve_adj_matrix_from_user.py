@@ -6,6 +6,20 @@ from lib.Project_1.read_data import read_matrix_from_file
 from lib.Utils.decorators import retry_on_value_error
 
 
+# asks user whether to use adjacency or incidence matrix representation.
+# returns selected MatrixRepresentation
+@retry_on_value_error
+def get_selection_for_undetermined():
+    val = int(input('Wpisz 1 aby uznac reprezentacje za macierz incydencji.\n'
+                    'Wpisz 2 aby uznac reprezentacje za macierz sasiedztwa.\n'))
+    if val == 1:
+        return MatrixRepresentation.IncidenceMatrix
+    elif val == 2:
+        return MatrixRepresentation.AdjacencyMatrix
+    else:
+        raise ValueError
+
+
 # reading graph from file as an adjacency matrix
 def graph_file_read():
     filename = input(
@@ -13,11 +27,12 @@ def graph_file_read():
 
     matrix, matrix_representation = read_matrix_from_file(filename)
     print("Wykryto " + matrix_representation.to_string())
+    if matrix_representation == MatrixRepresentation.UndeterminedMatrix:
+        matrix_representation = get_selection_for_undetermined()
 
     return any_representation_to_adjacency_matrix(matrix, matrix_representation)
 
 
-# converting any graph representation to adjacency matrix
 def any_representation_to_adjacency_matrix(matrix, matrix_representation):
     if matrix_representation == MatrixRepresentation.List:
         return list_to_adjacency_matrix(matrix)
@@ -31,9 +46,8 @@ def any_representation_to_adjacency_matrix(matrix, matrix_representation):
 @retry_on_value_error
 def retrieve_adjacency_matrix_from_user():
     input_type = int(input('Wpisz 1 aby podac plik zawierajacy dowolna reprezentacje grafu.\n'
-                            'Wpisz 2 aby wylosowac graf G(n, l).\n'
-                            'Wpisz 3 aby wylosowac graf G(n, p).\n'
-                            'Wpisz 4 aby wczytac graf z ciagu graficznego\n').strip())
+                           'Wpisz 2 aby wylosowac graf G(n, l).\n'
+                           'Wpisz 3 aby wylosowac graf G(n, p).\n'))
 
     if input_type == 1:
         return graph_file_read()
@@ -45,14 +59,5 @@ def retrieve_adjacency_matrix_from_user():
         nv = int(input('Podaj ilosc wezlow: ').strip())
         p = float(input('Podaj prawdopodobienstwo istnienia krawedzi: ').strip())
         return random_graph_probability(nv, p)
-    elif input_type == 4:
-        seq = load_sequence()
-        result = is_graphic_sequence(seq)
-        if result is not False:
-            print("Ciag jest graficzny")
-            return result
-        else:
-            print("Ciag nie jest graficzny")
-            raise ValueError
     else:
         raise ValueError
