@@ -1,4 +1,3 @@
-from igraph import *
 from Arguments import ArgumentsSingleton
 from lib.Project_3.random_weighted_graph import generate_random_weighted_graph_adjacency
 from lib.Project_3.weighted_graph import plot_weighted_graph_on_circle
@@ -7,6 +6,10 @@ from lib.Project_3.dijkstras import print_shortest_paths_table
 from lib.Project_3.dijkstras import print_graph_centers
 from lib.Project_3.spanning_tree import draw_minimum_spanning_tree
 from lib.Utils.decorators import retry_on_value_error
+
+# TODO indentation in 2 - path printing
+# TODO sum of all edges in spanning tree
+# TODO plot both graphs in spanning tree
 
 
 @retry_on_value_error
@@ -87,7 +90,7 @@ if __name__ == '__main__':
                 graph_adjacency_matrix = exercises[args['task']-1](arg_singleton)
             else: 
                 if graph_adjacency_matrix is None:
-                    initial_plot =  args['plots']
+                    initial_plot = args['plots']
                     args['plots'] = 'n'
                     graph_adjacency_matrix = randomize_and_plot_graph(arg_singleton)
                     args['plots'] = initial_plot

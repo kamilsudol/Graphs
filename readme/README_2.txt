@@ -62,4 +62,5 @@ ZADANIE 6 - cykl Hamiltona: -t 6 opcjonalnie(-f FILENAME -p PLOTS)
 	
 	W pozostałych zadaniach, tam, gdzie program prosi o podanie liczby, wprowadzenie ciągu znaków czy liczb oddzielonych spacjami spowoduje natychmiastowe wyświetlenie błędu.
 
-
+    Zadanie 6:
+    - jeśli wejściowa macierz może być interpretowana na dwa sposoby (incydencji, sąsiedztwa), użytkownik zostanie zapytany o sposób interpretacji.
