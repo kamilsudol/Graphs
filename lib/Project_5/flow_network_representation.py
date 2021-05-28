@@ -13,10 +13,14 @@ class FlowNetwork:
         self.initial_state()
 
     def initial_state(self):
-        for i in range(self.layers):
-            self.flow_matrix[0][i + 1] = 1
-            self.flow_matrix[self.layers * i + 1][self.layers * (i + 1) + 1] = 1
-            self.flow_matrix[self.nodes - i][self.nodes + 1] = 1
+        try:
+            for i in range(self.layers):
+                self.flow_matrix[0][i + 1] = 1
+                self.flow_matrix[self.nodes - i][self.nodes + 1] = 1
+                for j in range(self.layers):
+                    self.flow_matrix[self.layers * i + j + 1][self.layers * (i + 1) + j + 1] = 1
+        except IndexError:
+            pass
 
     def test_print(self):
         graph_plot = DiMatrixRepresentation.AdjacencyMatrix.to_digraph_func()(self.flow_matrix)
@@ -39,18 +43,21 @@ class FlowNetwork:
                     flag = self.__generate_random_flow_on_layers(self.layers * layer_choice + 1 - self.layers,
                                                                  self.layers * layer_choice + 2 * self.layers + 1)
 
-                if flag is False:
+                if flag is True:
                     break
 
     def __generate_random_flow_on_layers(self, min, max) -> (bool):
         node_choice_x = random.randrange(min, max)
         node_choice_y = random.randrange(min, max)
 
-        if abs(node_choice_x - node_choice_y) >= self.layers:
-            return True
+        if node_choice_x == node_choice_y:
+            return False
 
-        if node_choice_x == node_choice_y or self.flow_matrix[node_choice_y][node_choice_x] == 1:
-            return True
+        if abs(np.ceil(node_choice_x / self.layers) - np.ceil(node_choice_y / self.layers)) > 1:
+            return False
+
+        if self.flow_matrix[node_choice_x][node_choice_y] == 1 or self.flow_matrix[node_choice_y][node_choice_x] == 1:
+            return False
         else:
             self.flow_matrix[node_choice_y][node_choice_x] = 1
-            return False
+            return True
