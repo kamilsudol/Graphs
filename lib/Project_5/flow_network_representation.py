@@ -1,7 +1,9 @@
 import numpy as np
 import random
+import lib.Project_3.random_weighted_graph as rngraph_wei
 from lib.Project_4.plot_digraph_on_circle import plot_digraph_on_circle
 from lib.Project_4.DiMatrixRepresentation import DiMatrixRepresentation
+from lib.Project_4.digraph_creation import create_digraph_from_adjacency_matrix
 
 
 class FlowNetwork:
@@ -9,26 +11,50 @@ class FlowNetwork:
         self.nodes = N * N
         self.layers = N
         self.size = self.nodes + 2
+        self.adj_matrix = np.zeros([self.size, self.size], dtype=int)
         self.flow_matrix = np.zeros([self.size, self.size], dtype=int)
+        self.capacity_matrix = np.zeros([self.size, self.size], dtype=int)
         self.initial_state()
 
     def initial_state(self):
         try:
             for i in range(self.layers):
-                self.flow_matrix[0][i + 1] = 1
-                self.flow_matrix[self.nodes - i][self.nodes + 1] = 1
+                self.adj_matrix[0][i + 1] = 1
+                self.adj_matrix[self.nodes - i][self.nodes + 1] = 1
                 for j in range(self.layers):
-                    self.flow_matrix[self.layers * i + j + 1][self.layers * (i + 1) + j + 1] = 1
+                    self.adj_matrix[self.layers * i + j + 1][self.layers * (i + 1) + j + 1] = 1
         except IndexError:
             pass
 
-    def test_print(self):
-        graph_plot = DiMatrixRepresentation.AdjacencyMatrix.to_digraph_func()(self.flow_matrix)
-        plot_digraph_on_circle(graph_plot)
-        print(self.flow_matrix)
+    def plot_clean(self, debug=False):
+        g = create_digraph_from_adjacency_matrix(self.adj_matrix)
+        plot_digraph_on_circle(g)
+
+        if debug:
+            print(self.adj_matrix)
+
+    def plot_capacity(self, debug=False):
+        g = create_digraph_from_adjacency_matrix(self.adj_matrix)
+        plot_digraph_on_circle(g, weights=[self.adj_matrix, self.capacity_matrix])
+
+        if debug:
+            print(self.adj_matrix)
+
+    def plot_flow(self, debug=False):
+        g = create_digraph_from_adjacency_matrix(self.adj_matrix)
+        plot_digraph_on_circle(g, weights=[self.adj_matrix, self.flow_matrix])
+
+        if debug:
+            print(self.adj_matrix)
+
+    def get_adj_matrix(self):
+        return self.adj_matrix
 
     def get_flow_matrix(self):
         return self.flow_matrix
+
+    def get_capacity_matrix(self):
+        return self.capacity_matrix
 
     def generate_random_flow(self):
         for x in range(2 * self.layers):
@@ -56,8 +82,11 @@ class FlowNetwork:
         if abs(np.ceil(node_choice_x / self.layers) - np.ceil(node_choice_y / self.layers)) > 1:
             return False
 
-        if self.flow_matrix[node_choice_x][node_choice_y] == 1 or self.flow_matrix[node_choice_y][node_choice_x] == 1:
+        if self.adj_matrix[node_choice_x][node_choice_y] == 1 or self.adj_matrix[node_choice_y][node_choice_x] == 1:
             return False
         else:
-            self.flow_matrix[node_choice_y][node_choice_x] = 1
+            self.adj_matrix[node_choice_y][node_choice_x] = 1
             return True
+
+    def setup_capacities(self, min_capacity, max_capacity):
+        self.capacity_matrix = rngraph_wei.assign_weights_to_graph(self.get_adj_matrix(), min_capacity, max_capacity)
