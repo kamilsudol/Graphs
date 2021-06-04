@@ -2,7 +2,6 @@ import numpy as np
 import random
 import lib.Project_3.random_weighted_graph as rngraph_wei
 from lib.Project_4.plot_digraph_on_circle import plot_digraph_on_circle
-from lib.Project_4.DiMatrixRepresentation import DiMatrixRepresentation
 from lib.Project_4.digraph_creation import create_digraph_from_adjacency_matrix
 
 
@@ -25,27 +24,6 @@ class FlowNetwork:
                     self.adj_matrix[self.layers * i + j + 1][self.layers * (i + 1) + j + 1] = 1
         except IndexError:
             pass
-
-    def plot_clean(self, debug=False):
-        g = create_digraph_from_adjacency_matrix(self.adj_matrix)
-        plot_digraph_on_circle(g)
-
-        if debug:
-            print(self.adj_matrix)
-
-    def plot_capacity(self, debug=False):
-        g = create_digraph_from_adjacency_matrix(self.adj_matrix)
-        plot_digraph_on_circle(g, weights=[self.adj_matrix, self.capacity_matrix])
-
-        if debug:
-            print(self.adj_matrix)
-
-    def plot_flow(self, debug=False):
-        g = create_digraph_from_adjacency_matrix(self.adj_matrix)
-        plot_digraph_on_circle(g, weights=[self.adj_matrix, self.flow_matrix])
-
-        if debug:
-            print(self.adj_matrix)
 
     def get_adj_matrix(self):
         return self.adj_matrix
