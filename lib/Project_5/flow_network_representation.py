@@ -11,8 +11,9 @@ class FlowNetwork:
         self.layers = N
         self.size = self.nodes + 2
         self.adj_matrix = np.zeros([self.size, self.size], dtype=int)
-        self.flow_matrix = np.zeros([self.size, self.size], dtype=int)
-        self.capacity_matrix = np.zeros([self.size, self.size], dtype=int)
+        self.flow_matrix = np.zeros_like(self.adj_matrix)
+        self.capacity_matrix = np.zeros_like(self.adj_matrix)
+        self.residual_matrix = np.zeros_like(self.adj_matrix)
         self.initial_state()
 
     def initial_state(self):
@@ -33,6 +34,13 @@ class FlowNetwork:
 
     def get_capacity_matrix(self):
         return self.capacity_matrix
+
+    def get_residual_matrix(self):
+        return self.residual_matrix
+
+    def set_flows_to_zero(self):
+        self.flow_matrix = np.zeros_like(self.flow_matrix)
+        self.update_residual_matrix()
 
     def generate_random_flow(self):
         for x in range(2 * self.layers):
@@ -68,3 +76,17 @@ class FlowNetwork:
 
     def setup_capacities(self, min_capacity, max_capacity):
         self.capacity_matrix = rngraph_wei.assign_weights_to_graph(self.get_adj_matrix(), min_capacity, max_capacity)
+        self.update_residual_matrix()
+
+    def residual_capacity(self, i, j):
+        if self.adj_matrix[i][j] == 1:
+            return self.capacity_matrix[i][j] - self.flow_matrix[i][j]
+        elif self.adj_matrix[j][i] == 1:
+            return self.flow_matrix[j][i]
+        else:
+            return 0
+
+    def update_residual_matrix(self):
+        for i in range(len(self.residual_matrix)):
+            for j in range(len(self.residual_matrix[0])):
+                self.residual_matrix[i][j] = self.residual_capacity(i, j)
