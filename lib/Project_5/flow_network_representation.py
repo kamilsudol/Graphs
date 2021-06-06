@@ -42,6 +42,12 @@ class FlowNetwork:
         self.flow_matrix = np.zeros_like(self.flow_matrix)
         self.update_residual_matrix()
 
+    def is_edge_in_network(self, source, target):
+        return self.adj_matrix[source][target] == 1
+
+    def is_edge_in_residual_network(self, source, target):
+        return self.residual_matrix[source][target] != 0
+
     def generate_random_flow(self):
         for x in range(2 * self.layers):
             while True:
@@ -68,7 +74,7 @@ class FlowNetwork:
         if abs(np.ceil(node_choice_x / self.layers) - np.ceil(node_choice_y / self.layers)) > 1:
             return False
 
-        if self.adj_matrix[node_choice_x][node_choice_y] == 1 or self.adj_matrix[node_choice_y][node_choice_x] == 1:
+        if self.is_edge_in_network(node_choice_x, node_choice_y) or self.is_edge_in_network(node_choice_y, node_choice_x):
             return False
         else:
             self.adj_matrix[node_choice_y][node_choice_x] = 1
@@ -79,9 +85,9 @@ class FlowNetwork:
         self.update_residual_matrix()
 
     def residual_capacity(self, i, j):
-        if self.adj_matrix[i][j] == 1:
+        if self.is_edge_in_network(i, j):
             return self.capacity_matrix[i][j] - self.flow_matrix[i][j]
-        elif self.adj_matrix[j][i] == 1:
+        elif self.is_edge_in_network(j, i):
             return self.flow_matrix[j][i]
         else:
             return 0

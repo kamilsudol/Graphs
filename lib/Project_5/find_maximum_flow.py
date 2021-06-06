@@ -36,7 +36,7 @@ def path_from_source_to_target(network: FlowNetwork):
     while len(queue):
         v = queue.pop(0)
         for u in range(max(0, v - 2 * network.layers), min(len(network.residual_matrix), v + 2 * network.layers)):
-            if network.residual_matrix[v][u] != 0 and distances[u] == float('inf'):
+            if network.is_edge_in_residual_network(v, u) and distances[u] == float('inf'):
                 distances[u] = distances[v] + 1
                 predecessors[u] = v
                 queue.append(u)
@@ -61,7 +61,7 @@ def find_maximum_flow(network: FlowNetwork):
         path_cap = path_capacity(network, path)
 
         for i, j in path:
-            if network.adj_matrix[i][j] == 1:
+            if network.is_edge_in_network(i, j):
                 network.flow_matrix[i][j] += path_cap
             else:
                 network.flow_matrix[i][j] -= path_cap
@@ -69,4 +69,7 @@ def find_maximum_flow(network: FlowNetwork):
         network.update_residual_matrix()
         path = path_from_source_to_target(network)
 
-    return np.sum(network.flow_matrix[0])
+    output_from_source = np.sum(network.flow_matrix[0])
+    intput_to_target = np.sum(network.flow_matrix[:, -1])
+    assert output_from_source == intput_to_target
+    return intput_to_target

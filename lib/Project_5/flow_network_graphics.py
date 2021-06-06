@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from math import atan2, cos, sin
-
+from itertools import product
 
 from lib.Project_5.flow_network_representation import FlowNetwork
 
@@ -52,21 +52,18 @@ def arrow_between_vertices(v1, v2, vertex_size, text, color='coral'):
 
 
 def draw_connections(network: FlowNetwork, vertex_positions, draw_capacities=True, draw_flow=True):
-    adjacency = network.get_adj_matrix()
     capacities = network.get_capacity_matrix()
     flow = network.get_flow_matrix()
     vertex_size = calc_vertex_size(network.layers)
-    n = len(capacities)
-    for i in range(n):
-        for j in range(n):
-            if adjacency[i][j]:
-                text = ''
-                if draw_capacities and draw_flow:
-                    text = '[{}/{}]'.format(int(flow[i][j]), int(capacities[i][j]))
-                elif draw_capacities:
-                    text = '[{}]'.format(int(capacities[i][j]))
-                color = 'yellowgreen' if flow[i][j] == 0 else 'red' if flow[i][j] == capacities[i][j] else 'coral'
-                arrow_between_vertices(vertex_positions[i], vertex_positions[j], vertex_size, text=text, color=color)
+    for i, j in product(range(len(capacities)), repeat = 2):
+        if network.is_edge_in_network(i, j):
+            text = ''
+            if draw_capacities and draw_flow:
+                text = '[{}/{}]'.format(int(flow[i][j]), int(capacities[i][j]))
+            elif draw_capacities:
+                text = '[{}]'.format(int(capacities[i][j]))
+            color = 'yellowgreen' if flow[i][j] == 0 else 'red' if flow[i][j] == capacities[i][j] else 'coral'
+            arrow_between_vertices(vertex_positions[i], vertex_positions[j], vertex_size, text=text, color=color)
 
 
 def draw_flow_network(network: FlowNetwork, draw_capacities=False, draw_flow=False):
