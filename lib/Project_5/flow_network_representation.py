@@ -50,7 +50,7 @@ class FlowNetwork:
 
     def generate_random_flow(self):
         for x in range(2 * self.layers):
-            while True:
+            for i in range(10**2):
                 layer_choice = random.randrange(self.layers)
                 if layer_choice == 0:
                     flag = self.__generate_random_flow_on_layers(1, 2 * self.layers + 1)
@@ -63,6 +63,8 @@ class FlowNetwork:
 
                 if flag is True:
                     break
+            else:
+                raise ValueError("Unable to generate network!")
 
     def __generate_random_flow_on_layers(self, min, max) -> (bool):
         node_choice_x = random.randrange(min, max)
