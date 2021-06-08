@@ -1,6 +1,8 @@
 from operator import attrgetter
+from matplotlib import pyplot as plt
 
-from lib.Project_3.weighted_graph import plot_weighted_graph_on_circle
+from lib.Project_3.weighted_graph import plot_two_graphs_in_subplots
+from lib.Utils.pretty_print import print_int_matrix
 
 
 class Edge:
@@ -40,6 +42,15 @@ def draw_minimum_spanning_tree(adjacency_matrix, arg_singleton):
     res_adj_mat = prim_generate_minimum_spanning_tree(adjacency_matrix)
     if not res_adj_mat:
         print('Blad generacji minimalnego drzewa rozpinajacego: graf nie jest spojny.')
+        return
     
     if args['plots'] != 'n':
-        plot_weighted_graph_on_circle(res_adj_mat)
+        t1 = 'Oryginalny graf'
+        t2 = 'Minimalne drzewo rozpinajace'
+        plot_two_graphs_in_subplots(adjacency_matrix, res_adj_mat, t1, t2)
+
+    print('Otrzymano drzewo rozpinajace o macierzy sasiedztwa:')
+    print_int_matrix(res_adj_mat)
+
+    s = int(sum([sum(row) for row in res_adj_mat]) / 2)
+    print('Suma wag krawedzi drzewa to {}\n'.format(s))

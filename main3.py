@@ -6,6 +6,7 @@ from lib.Project_3.dijkstras import print_shortest_paths_table
 from lib.Project_3.dijkstras import print_graph_centers
 from lib.Project_3.spanning_tree import draw_minimum_spanning_tree
 from lib.Utils.decorators import retry_on_value_error
+from lib.Utils.pretty_print import print_int_matrix
 
 # TODO indentation in 2 - path printing
 # TODO sum of all edges in spanning tree
@@ -36,10 +37,13 @@ def randomize_and_plot_graph(arg_singleton):
     
     while not graph_adjacency_matrix:
         print('Blad generowania grafu. Sprobuj jeszcze raz.')
-        graph_adjacency_matrix = generate_random_weighted_graph_adjacency()
+        graph_adjacency_matrix = generate_random_weighted_graph_adjacency(arg_singleton)
 
     if args['plots'] != 'n':
         plot_weighted_graph_on_circle(graph_adjacency_matrix)
+
+    print('Wygenerowano graf o nastepujacej macierzy sasiedztwa:')
+    print_int_matrix(graph_adjacency_matrix)
 
     return graph_adjacency_matrix
 
