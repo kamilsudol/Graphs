@@ -78,7 +78,7 @@ ZADANIE 5 - minimalne drzewo rozpinajace: -t 5 opcjonalnie(-f FILENAME -p PLOTS)
 		graf wygenerowany w zadaniu 1 jest automatycznie pobierany
 		opcjonalnie można wprowadzić graf w postaci macierzy sasiedztwa za pomocą flagi wywołania konsolowego
 	wyjście:
-		graficzna reprezentacja minimalnego drzewa rozpinającego powstałego z podanego grafu.
+		graficzne porownanie podanego grafu oraz minimalnego drzewa rozpinającego powstałego z podanego grafu.
 	W PRZYPADKU WYWOŁANIA Z APLIKACJI:
 		zadanie wymaga wygenerowania grafu losowego z wagami za pomocą zadania 1
 	W PRZYPADKU WYWOŁANIA Z KONSOLI:
